@@ -6,8 +6,10 @@
   "files": [
     "/examples",
     "/lib",
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
+  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/EnriqueSampaio/apache-ignite-client"
