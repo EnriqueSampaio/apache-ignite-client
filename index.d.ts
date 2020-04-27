@@ -3,10 +3,3 @@ export class Timestamp extends Date {
   getNanos(): number;
   setNanos(): this;
 }
-export namespace IgniteClient {
-  enum STATE {
-    DISCONNECTED,
-    CONNECTING,
-    CONNECTED
-  }
-}
