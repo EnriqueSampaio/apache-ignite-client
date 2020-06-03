@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict'
-Object.defineProperty(exports, '__esModule', { value: true })
-exports.ComplexObjectType = exports.ObjectArrayType = exports.CollectionObjectType = exports.MapObjectType = exports.CompositeType = exports.ObjectType = void 0
-const Util = require('util')
-const internal_1 = require('./internal')
+'use strict';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ComplexObjectType = exports.ObjectArrayType = exports.CollectionObjectType = exports.MapObjectType = exports.CompositeType = exports.ObjectType = void 0;
+const Util = require("util");
+const internal_1 = require("./internal");
 /**
  * Supported Ignite type codes for primitive (simple) types.
  * @typedef ObjectType.PRIMITIVE_TYPE
@@ -86,7 +86,7 @@ const PRIMITIVE_TYPE = Object.freeze({
     TIMESTAMP_ARRAY: 34,
     TIME: 36,
     TIME_ARRAY: 37
-})
+});
 /**
  * Supported Ignite type codes for non-primitive (composite) types.
  * @typedef ObjectType.COMPOSITE_TYPE
@@ -104,7 +104,7 @@ const COMPOSITE_TYPE = Object.freeze({
     MAP: 25,
     NULL: 101,
     COMPLEX_OBJECT: 103
-})
+});
 /**
  * Base class representing a type of Ignite object.
  *
@@ -286,17 +286,17 @@ const COMPOSITE_TYPE = Object.freeze({
 class ObjectType {
     /** Private methods */
     constructor(typeCode) {
-        this._typeCode = typeCode
+        this._typeCode = typeCode;
     }
-    get typeCode() { return this._typeCode }
+    get typeCode() { return this._typeCode; }
     static get PRIMITIVE_TYPE() {
-        return PRIMITIVE_TYPE
+        return PRIMITIVE_TYPE;
     }
     static get COMPOSITE_TYPE() {
-        return COMPOSITE_TYPE
+        return COMPOSITE_TYPE;
     }
 }
-exports.ObjectType = ObjectType
+exports.ObjectType = ObjectType;
 /**
  * Base class representing a non-primitive (composite) type of Ignite object.
  *
@@ -307,7 +307,7 @@ exports.ObjectType = ObjectType
  */
 class CompositeType extends ObjectType {
 }
-exports.CompositeType = CompositeType
+exports.CompositeType = CompositeType;
 /**
  * Supported kinds of map.
  * @typedef MapObjectType.MAP_SUBTYPE
@@ -319,7 +319,7 @@ exports.CompositeType = CompositeType
 const MAP_SUBTYPE = Object.freeze({
     HASH_MAP: 1,
     LINKED_HASH_MAP: 2
-})
+});
 /**
  * Class representing a map type of Ignite object.
  *
@@ -356,19 +356,19 @@ class MapObjectType extends CompositeType {
      * @throws {IgniteClientError} if error.
      */
     constructor(mapSubType = MapObjectType.MAP_SUBTYPE.HASH_MAP, keyType = null, valueType = null) {
-        super(COMPOSITE_TYPE.MAP)
-        internal_1.ArgumentChecker.hasValueFrom(mapSubType, 'mapSubType', false, MapObjectType.MAP_SUBTYPE)
-        this._subType = mapSubType
-        internal_1.BinaryUtils.checkObjectType(keyType, 'keyType')
-        internal_1.BinaryUtils.checkObjectType(valueType, 'valueType')
-        this._keyType = keyType
-        this._valueType = valueType
+        super(COMPOSITE_TYPE.MAP);
+        internal_1.ArgumentChecker.hasValueFrom(mapSubType, 'mapSubType', false, MapObjectType.MAP_SUBTYPE);
+        this._subType = mapSubType;
+        internal_1.BinaryUtils.checkObjectType(keyType, 'keyType');
+        internal_1.BinaryUtils.checkObjectType(valueType, 'valueType');
+        this._keyType = keyType;
+        this._valueType = valueType;
     }
     static get MAP_SUBTYPE() {
-        return MAP_SUBTYPE
+        return MAP_SUBTYPE;
     }
 }
-exports.MapObjectType = MapObjectType
+exports.MapObjectType = MapObjectType;
 /**
  * Supported kinds of collections.
  * @typedef CollectionObjectType.COLLECTION_SUBTYPE
@@ -390,7 +390,7 @@ const COLLECTION_SUBTYPE = Object.freeze({
     HASH_SET: 3,
     LINKED_HASH_SET: 4,
     SINGLETON_LIST: 5
-})
+});
 /**
  * Class representing a collection type of Ignite object.
  *
@@ -422,14 +422,14 @@ class CollectionObjectType extends CompositeType {
      * @throws {IgniteClientError} if error.
      */
     constructor(collectionSubType, elementType = null) {
-        super(COMPOSITE_TYPE.COLLECTION)
-        internal_1.ArgumentChecker.hasValueFrom(collectionSubType, 'collectionSubType', false, CollectionObjectType.COLLECTION_SUBTYPE)
-        this._subType = collectionSubType
-        internal_1.BinaryUtils.checkObjectType(elementType, 'elementType')
-        this._elementType = elementType
+        super(COMPOSITE_TYPE.COLLECTION);
+        internal_1.ArgumentChecker.hasValueFrom(collectionSubType, 'collectionSubType', false, CollectionObjectType.COLLECTION_SUBTYPE);
+        this._subType = collectionSubType;
+        internal_1.BinaryUtils.checkObjectType(elementType, 'elementType');
+        this._elementType = elementType;
     }
     static get COLLECTION_SUBTYPE() {
-        return COLLECTION_SUBTYPE
+        return COLLECTION_SUBTYPE;
     }
     /** Private methods */
     /**
@@ -438,16 +438,16 @@ class CollectionObjectType extends CompositeType {
     static _isSet(subType) {
         return subType === CollectionObjectType.COLLECTION_SUBTYPE.USER_SET ||
             subType === CollectionObjectType.COLLECTION_SUBTYPE.HASH_SET ||
-            subType === CollectionObjectType.COLLECTION_SUBTYPE.LINKED_HASH_SET
+            subType === CollectionObjectType.COLLECTION_SUBTYPE.LINKED_HASH_SET;
     }
     /**
      * @ignore
      */
     _isSet() {
-        return CollectionObjectType._isSet(this._subType)
+        return CollectionObjectType._isSet(this._subType);
     }
 }
-exports.CollectionObjectType = CollectionObjectType
+exports.CollectionObjectType = CollectionObjectType;
 /**
  * Class representing an array type of Ignite objects.
  *
@@ -475,13 +475,13 @@ class ObjectArrayType extends CompositeType {
      * @throws {IgniteClientError} if error.
      */
     constructor(elementType = null) {
-        super(COMPOSITE_TYPE.OBJECT_ARRAY)
-        internal_1.BinaryUtils.checkObjectType(elementType, 'elementType')
-        this._elementType = elementType
+        super(COMPOSITE_TYPE.OBJECT_ARRAY);
+        internal_1.BinaryUtils.checkObjectType(elementType, 'elementType');
+        this._elementType = elementType;
     }
-    get elementType() { return this._elementType }
+    get elementType() { return this._elementType; }
 }
-exports.ObjectArrayType = ObjectArrayType
+exports.ObjectArrayType = ObjectArrayType;
 /**
  * Class representing a complex type of Ignite object.
  *
@@ -519,21 +519,21 @@ class ComplexObjectType extends CompositeType {
      * @throws {IgniteClientError} if error.
      */
     constructor(jsObject, typeName = null) {
-        super(COMPOSITE_TYPE.COMPLEX_OBJECT)
-        internal_1.ArgumentChecker.notEmpty(jsObject, 'jsObject')
-        this._template = jsObject
+        super(COMPOSITE_TYPE.COMPLEX_OBJECT);
+        internal_1.ArgumentChecker.notEmpty(jsObject, 'jsObject');
+        this._template = jsObject;
         this._objectConstructor = jsObject && jsObject.constructor ?
-            jsObject.constructor : Object
+            jsObject.constructor : Object;
         if (!typeName) {
-            typeName = this._objectConstructor.name
+            typeName = this._objectConstructor.name;
         }
-        this._typeName = typeName
-        this._fields = new Map()
+        this._typeName = typeName;
+        this._fields = new Map();
         for (let fieldName of internal_1.BinaryUtils.getJsObjectFieldNames(this._template)) {
-            this._fields.set(fieldName, null)
+            this._fields.set(fieldName, null);
         }
     }
-    get typeName() { return this._typeName }
+    get typeName() { return this._typeName; }
     /**
      * Specifies a type of the field in the complex type.
      *
@@ -553,19 +553,19 @@ class ComplexObjectType extends CompositeType {
      */
     setFieldType(fieldName, fieldType) {
         if (!this._fields.has(fieldName)) {
-            throw internal_1.Errors.IgniteClientError.illegalArgumentError(Util.format('Field "%s" is absent in the complex object type', fieldName))
+            throw internal_1.Errors.IgniteClientError.illegalArgumentError(Util.format('Field "%s" is absent in the complex object type', fieldName));
         }
-        internal_1.BinaryUtils.checkObjectType(fieldType, 'fieldType')
-        this._fields.set(fieldName, fieldType)
-        return this
+        internal_1.BinaryUtils.checkObjectType(fieldType, 'fieldType');
+        this._fields.set(fieldName, fieldType);
+        return this;
     }
     /** Private methods */
     /**
      * @ignore
      */
     _getFieldType(fieldName) {
-        return this._fields.get(fieldName)
+        return this._fields.get(fieldName);
     }
 }
-exports.ComplexObjectType = ComplexObjectType
-// # sourceMappingURL=ObjectType.js.map
+exports.ComplexObjectType = ComplexObjectType;
+//# sourceMappingURL=ObjectType.js.map

@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict'
-var __awaiter = (this && this.__awaiter) || function(thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function(resolve) { resolve(value) }) }
-    return new (P || (P = Promise))(function(resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)) } catch (e) { reject(e) } }
-        function rejected(value) { try { step(generator['throw'](value)) } catch (e) { reject(e) } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected) }
-        step((generator = generator.apply(thisArg, _arguments || [])).next())
-    })
-}
-Object.defineProperty(exports, '__esModule', { value: true })
-exports.IgniteClient = void 0
+'use strict';
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.IgniteClient = void 0;
 /*
 import { CacheClient } from './CacheClient';
 import { IgniteClientConfiguration } from './IgniteClientConfiguration';
@@ -36,7 +36,7 @@ import { ArgumentChecker } from './internal/ArgumentChecker';
 import { Logger } from './internal/Logger';
 import { ClientFailoverSocket } from './internal/ClientFailoverSocket';
 */
-const internal_1 = require('./internal')
+const internal_1 = require("./internal");
 /**
  * State of Ignite client.
  *
@@ -61,7 +61,7 @@ const STATE = Object.freeze({
     DISCONNECTED: 0,
     CONNECTING: 1,
     CONNECTED: 2
-})
+});
 /**
  * Class representing Ignite client.
  *
@@ -76,11 +76,11 @@ class IgniteClient {
      * @return {IgniteClient} - new IgniteClient instance.
      */
     constructor(onStateChanged = null) {
-        this._socket = new internal_1.ClientFailoverSocket(onStateChanged)
-        this._communicator = new internal_1.BinaryCommunicator(this._socket)
+        this._socket = new internal_1.ClientFailoverSocket(onStateChanged);
+        this._communicator = new internal_1.BinaryCommunicator(this._socket);
     }
     static get STATE() {
-        return STATE
+        return STATE;
     }
     /**
      * onStateChanged callback.
@@ -103,10 +103,10 @@ class IgniteClient {
      */
     connect(config) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.ArgumentChecker.notEmpty(config, 'config')
-            internal_1.ArgumentChecker.hasType(config, 'config', false, internal_1.IgniteClientConfiguration)
-            yield this._socket.connect(config)
-        })
+            internal_1.ArgumentChecker.notEmpty(config, 'config');
+            internal_1.ArgumentChecker.hasType(config, 'config', false, internal_1.IgniteClientConfiguration);
+            yield this._socket.connect(config);
+        });
     }
     /**
      * Disconnects the client.
@@ -116,7 +116,7 @@ class IgniteClient {
      */
     disconnect() {
         if (this._socket) {
-            this._socket.disconnect()
+            this._socket.disconnect();
         }
     }
     /**
@@ -135,15 +135,15 @@ class IgniteClient {
      */
     createCache(name, cacheConfig = null) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.ArgumentChecker.notEmpty(name, 'name')
-            internal_1.ArgumentChecker.hasType(cacheConfig, 'cacheConfig', false, internal_1.CacheConfiguration)
+            internal_1.ArgumentChecker.notEmpty(name, 'name');
+            internal_1.ArgumentChecker.hasType(cacheConfig, 'cacheConfig', false, internal_1.CacheConfiguration);
             yield this._communicator.send(cacheConfig ?
                 internal_1.BinaryUtils.OPERATION.CACHE_CREATE_WITH_CONFIGURATION :
                 internal_1.BinaryUtils.OPERATION.CACHE_CREATE_WITH_NAME, (payload) => __awaiter(this, void 0, void 0, function* () {
-                yield this._writeCacheNameOrConfig(payload, name, cacheConfig)
-            }))
-            return this._getCache(name, cacheConfig)
-        })
+                yield this._writeCacheNameOrConfig(payload, name, cacheConfig);
+            }));
+            return this._getCache(name, cacheConfig);
+        });
     }
     /**
      * Gets existing cache with the provided name
@@ -162,15 +162,15 @@ class IgniteClient {
      */
     getOrCreateCache(name, cacheConfig = null) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.ArgumentChecker.notEmpty(name, 'name')
-            internal_1.ArgumentChecker.hasType(cacheConfig, 'cacheConfig', false, internal_1.CacheConfiguration)
+            internal_1.ArgumentChecker.notEmpty(name, 'name');
+            internal_1.ArgumentChecker.hasType(cacheConfig, 'cacheConfig', false, internal_1.CacheConfiguration);
             yield this._communicator.send(cacheConfig ?
                 internal_1.BinaryUtils.OPERATION.CACHE_GET_OR_CREATE_WITH_CONFIGURATION :
                 internal_1.BinaryUtils.OPERATION.CACHE_GET_OR_CREATE_WITH_NAME, (payload) => __awaiter(this, void 0, void 0, function* () {
-                yield this._writeCacheNameOrConfig(payload, name, cacheConfig)
-            }))
-            return this._getCache(name, cacheConfig)
-        })
+                yield this._writeCacheNameOrConfig(payload, name, cacheConfig);
+            }));
+            return this._getCache(name, cacheConfig);
+        });
     }
     /**
      * Gets cache client instance of cache with the provided name.
@@ -183,8 +183,8 @@ class IgniteClient {
      * @throws {IgniteClientError} if error.
      */
     getCache(name) {
-        internal_1.ArgumentChecker.notEmpty(name, 'name')
-        return this._getCache(name)
+        internal_1.ArgumentChecker.notEmpty(name, 'name');
+        return this._getCache(name);
     }
     /**
      * Destroys cache with the provided name.
@@ -199,11 +199,11 @@ class IgniteClient {
      */
     destroyCache(name) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.ArgumentChecker.notEmpty(name, 'name')
+            internal_1.ArgumentChecker.notEmpty(name, 'name');
             yield this._communicator.send(internal_1.BinaryUtils.OPERATION.CACHE_DESTROY, (payload) => __awaiter(this, void 0, void 0, function* () {
-                payload.writeInteger(internal_1.CacheClient._calculateId(name))
-            }))
-        })
+                payload.writeInteger(internal_1.CacheClient._calculateId(name));
+            }));
+        });
     }
     /**
      * Returns configuration of cache with the provided name.
@@ -220,17 +220,17 @@ class IgniteClient {
      */
     getCacheConfiguration(name) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.ArgumentChecker.notEmpty(name, 'name')
-            let config
+            internal_1.ArgumentChecker.notEmpty(name, 'name');
+            let config;
             yield this._communicator.send(internal_1.BinaryUtils.OPERATION.CACHE_GET_CONFIGURATION, (payload) => __awaiter(this, void 0, void 0, function* () {
-                payload.writeInteger(internal_1.CacheClient._calculateId(name))
-                payload.writeByte(0)
+                payload.writeInteger(internal_1.CacheClient._calculateId(name));
+                payload.writeByte(0);
             }), (payload) => __awaiter(this, void 0, void 0, function* () {
-                config = new internal_1.CacheConfiguration()
-                yield config._read(this._communicator, payload)
-            }))
-            return config
-        })
+                config = new internal_1.CacheConfiguration();
+                yield config._read(this._communicator, payload);
+            }));
+            return config;
+        });
     }
     /**
      * Gets existing cache names.
@@ -245,12 +245,12 @@ class IgniteClient {
      */
     cacheNames() {
         return __awaiter(this, void 0, void 0, function* () {
-            let names
+            let names;
             yield this._communicator.send(internal_1.BinaryUtils.OPERATION.CACHE_GET_NAMES, null, (payload) => __awaiter(this, void 0, void 0, function* () {
-                names = yield this._communicator.readStringArray(payload)
-            }))
-            return names
-        })
+                names = yield this._communicator.readStringArray(payload);
+            }));
+            return names;
+        });
     }
     /**
      * Enables/disables the library debug output (including errors logging).
@@ -259,14 +259,14 @@ class IgniteClient {
      * @param {boolean} value - true to enable, false to disable
      */
     setDebug(value) {
-        internal_1.Logger.debug = value
+        internal_1.Logger.debug = value;
     }
     /** Private methods */
     /**
      * @ignore
      */
     _getCache(name, cacheConfig = null) {
-        return new internal_1.CacheClient(name, cacheConfig, this._communicator)
+        return new internal_1.CacheClient(name, cacheConfig, this._communicator);
     }
     /**
      * @ignore
@@ -274,12 +274,13 @@ class IgniteClient {
     _writeCacheNameOrConfig(buffer, name, cacheConfig) {
         return __awaiter(this, void 0, void 0, function* () {
             if (cacheConfig) {
-                yield cacheConfig._write(this._communicator, buffer, name)
-            }            else {
-                internal_1.BinaryCommunicator.writeString(buffer, name)
+                yield cacheConfig._write(this._communicator, buffer, name);
             }
-        })
+            else {
+                internal_1.BinaryCommunicator.writeString(buffer, name);
+            }
+        });
     }
 }
-exports.IgniteClient = IgniteClient
-// # sourceMappingURL=IgniteClient.js.map
+exports.IgniteClient = IgniteClient;
+//# sourceMappingURL=IgniteClient.js.map

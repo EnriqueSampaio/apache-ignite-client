@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict'
-Object.defineProperty(exports, '__esModule', { value: true })
-exports.BinaryUtils = void 0
-const decimal_js_1 = require('decimal.js')
-const internal_1 = require('../internal')
+'use strict';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BinaryUtils = void 0;
+const decimal_js_1 = require("decimal.js");
+const internal_1 = require("../internal");
 // Operation codes
 const OPERATION = Object.freeze({
     // Key-Value Queries
@@ -62,11 +62,11 @@ const OPERATION = Object.freeze({
     // Binary Types
     GET_BINARY_TYPE: 3002,
     PUT_BINARY_TYPE: 3003
-})
+});
 const TYPE_CODE = Object.assign({
     BINARY_OBJECT: 27,
     BINARY_ENUM: 38
-}, internal_1.ObjectType.PRIMITIVE_TYPE, internal_1.ObjectType.COMPOSITE_TYPE)
+}, internal_1.ObjectType.PRIMITIVE_TYPE, internal_1.ObjectType.COMPOSITE_TYPE);
 const TYPE_INFO = Object.freeze({
     [TYPE_CODE.BYTE]: {
         NAME: 'byte',
@@ -238,164 +238,177 @@ const TYPE_INFO = Object.freeze({
         NAME: 'complex object',
         NULLABLE: true
     }
-})
-const UTF8_ENCODING = 'utf8'
+});
+const UTF8_ENCODING = 'utf8';
 class BinaryUtils {
     static get OPERATION() {
-        return OPERATION
+        return OPERATION;
     }
     static get TYPE_CODE() {
-        return TYPE_CODE
+        return TYPE_CODE;
     }
     static get TYPE_INFO() {
-        return TYPE_INFO
+        return TYPE_INFO;
     }
     static getSize(typeCode) {
-        const size = TYPE_INFO[typeCode].SIZE
-        return size ? size : 0
+        const size = TYPE_INFO[typeCode].SIZE;
+        return size ? size : 0;
     }
     static get ENCODING() {
-        return UTF8_ENCODING
+        return UTF8_ENCODING;
     }
     static getTypeName(type) {
         if (typeof type === 'string') {
-            return type
+            return type;
         }
-        const typeCode = BinaryUtils.getTypeCode(type)
-        return TYPE_INFO[typeCode] ? TYPE_INFO[typeCode].NAME : 'type code ' + typeCode
+        const typeCode = BinaryUtils.getTypeCode(type);
+        return TYPE_INFO[typeCode] ? TYPE_INFO[typeCode].NAME : 'type code ' + typeCode;
     }
     static isNullable(type) {
-        return TYPE_INFO[BinaryUtils.getTypeCode(type)].NULLABLE === true
+        return TYPE_INFO[BinaryUtils.getTypeCode(type)].NULLABLE === true;
     }
     static getTypeCode(type) {
-        return type instanceof internal_1.CompositeType ? type.typeCode : type
+        return type instanceof internal_1.CompositeType ? type.typeCode : type;
     }
     static checkObjectType(type, argName) {
         if (type === null || type instanceof internal_1.CompositeType) {
-            return
+            return;
         }
-        internal_1.ArgumentChecker.hasValueFrom(type, argName, false, internal_1.ObjectType.PRIMITIVE_TYPE)
+        internal_1.ArgumentChecker.hasValueFrom(type, argName, false, internal_1.ObjectType.PRIMITIVE_TYPE);
     }
     static calcObjectType(object) {
-        const objectType = typeof object
+        const objectType = typeof object;
         if (object === null) {
-            throw internal_1.Errors.IgniteClientError.unsupportedTypeError(BinaryUtils.TYPE_CODE.NULL)
-        }        else if (objectType === 'number') {
-            return BinaryUtils.TYPE_CODE.DOUBLE
-        }        else if (objectType === 'string') {
-            return BinaryUtils.TYPE_CODE.STRING
-        }        else if (objectType === 'boolean') {
-            return BinaryUtils.TYPE_CODE.BOOLEAN
-        }        else if (object instanceof internal_1.Timestamp) {
-            return BinaryUtils.TYPE_CODE.TIMESTAMP
-        }        else if (object instanceof Date) {
-            return BinaryUtils.TYPE_CODE.DATE
-        }        else if (object instanceof internal_1.EnumItem) {
-            return BinaryUtils.TYPE_CODE.ENUM
-        }        else if (object instanceof decimal_js_1.default) {
-            return BinaryUtils.TYPE_CODE.DECIMAL
-        }        else if (object instanceof Array) {
-            if (object.length > 0 && object[0] !== null) {
-                return BinaryUtils.getArrayType(BinaryUtils.calcObjectType(object[0]))
-            }
-        }        else if (object instanceof Set) {
-            return new internal_1.CollectionObjectType(internal_1.CollectionObjectType.COLLECTION_SUBTYPE.HASH_SET)
-        }        else if (object instanceof Map) {
-            return new internal_1.MapObjectType()
-        }        else if (object instanceof internal_1.BinaryObject) {
-            return BinaryUtils.TYPE_CODE.BINARY_OBJECT
-        }        else if (objectType === 'object') {
-            return new internal_1.ComplexObjectType(object)
+            throw internal_1.Errors.IgniteClientError.unsupportedTypeError(BinaryUtils.TYPE_CODE.NULL);
         }
-        throw internal_1.Errors.IgniteClientError.unsupportedTypeError(objectType)
+        else if (objectType === 'number') {
+            return BinaryUtils.TYPE_CODE.DOUBLE;
+        }
+        else if (objectType === 'string') {
+            return BinaryUtils.TYPE_CODE.STRING;
+        }
+        else if (objectType === 'boolean') {
+            return BinaryUtils.TYPE_CODE.BOOLEAN;
+        }
+        else if (object instanceof internal_1.Timestamp) {
+            return BinaryUtils.TYPE_CODE.TIMESTAMP;
+        }
+        else if (object instanceof Date) {
+            return BinaryUtils.TYPE_CODE.DATE;
+        }
+        else if (object instanceof internal_1.EnumItem) {
+            return BinaryUtils.TYPE_CODE.ENUM;
+        }
+        else if (object instanceof decimal_js_1.default) {
+            return BinaryUtils.TYPE_CODE.DECIMAL;
+        }
+        else if (object instanceof Array) {
+            if (object.length > 0 && object[0] !== null) {
+                return BinaryUtils.getArrayType(BinaryUtils.calcObjectType(object[0]));
+            }
+        }
+        else if (object instanceof Set) {
+            return new internal_1.CollectionObjectType(internal_1.CollectionObjectType.COLLECTION_SUBTYPE.HASH_SET);
+        }
+        else if (object instanceof Map) {
+            return new internal_1.MapObjectType();
+        }
+        else if (object instanceof internal_1.BinaryObject) {
+            return BinaryUtils.TYPE_CODE.BINARY_OBJECT;
+        }
+        else if (objectType === 'object') {
+            return new internal_1.ComplexObjectType(object);
+        }
+        throw internal_1.Errors.IgniteClientError.unsupportedTypeError(objectType);
     }
     static checkCompatibility(value, type) {
         if (!type) {
-            return
+            return;
         }
-        const typeCode = BinaryUtils.getTypeCode(type)
+        const typeCode = BinaryUtils.getTypeCode(type);
         if (value === null) {
             if (!BinaryUtils.isNullable(typeCode)) {
-                throw internal_1.Errors.IgniteClientError.typeCastError(BinaryUtils.TYPE_CODE.NULL, typeCode)
+                throw internal_1.Errors.IgniteClientError.typeCastError(BinaryUtils.TYPE_CODE.NULL, typeCode);
             }
-            return
-        }        else if (BinaryUtils.isStandardType(typeCode)) {
-            BinaryUtils.checkStandardTypeCompatibility(value, typeCode, type)
-            return
+            return;
         }
-        const valueTypeCode = BinaryUtils.getTypeCode(BinaryUtils.calcObjectType(value))
+        else if (BinaryUtils.isStandardType(typeCode)) {
+            BinaryUtils.checkStandardTypeCompatibility(value, typeCode, type);
+            return;
+        }
+        const valueTypeCode = BinaryUtils.getTypeCode(BinaryUtils.calcObjectType(value));
         if (typeCode !== valueTypeCode) {
-            throw internal_1.Errors.IgniteClientError.typeCastError(valueTypeCode, typeCode)
+            throw internal_1.Errors.IgniteClientError.typeCastError(valueTypeCode, typeCode);
         }
     }
     static isStandardType(typeCode) {
         return typeCode !== BinaryUtils.TYPE_CODE.BINARY_OBJECT &&
-            typeCode !== BinaryUtils.TYPE_CODE.COMPLEX_OBJECT
+            typeCode !== BinaryUtils.TYPE_CODE.COMPLEX_OBJECT;
     }
     static checkStandardTypeCompatibility(value, typeCode, type = null) {
-        const valueType = typeof value
+        const valueType = typeof value;
         switch (typeCode) {
             case BinaryUtils.TYPE_CODE.BYTE:
             case BinaryUtils.TYPE_CODE.SHORT:
             case BinaryUtils.TYPE_CODE.INTEGER:
             case BinaryUtils.TYPE_CODE.LONG:
                 if (!Number.isInteger(value)) {
-                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode)
+                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode);
                 }
-                return
+                return;
             case BinaryUtils.TYPE_CODE.FLOAT:
             case BinaryUtils.TYPE_CODE.DOUBLE:
                 if (valueType !== 'number') {
-                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode)
+                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode);
                 }
-                return
+                return;
             case BinaryUtils.TYPE_CODE.CHAR:
                 if (valueType !== 'string' || value.length !== 1) {
-                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode)
+                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode);
                 }
-                return
+                return;
             case BinaryUtils.TYPE_CODE.BOOLEAN:
                 if (valueType !== 'boolean') {
-                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode)
+                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode);
                 }
-                return
+                return;
             case BinaryUtils.TYPE_CODE.STRING:
                 if (valueType !== 'string') {
-                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode)
+                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode);
                 }
-                return
+                return;
             case BinaryUtils.TYPE_CODE.UUID:
                 if (!(value instanceof Array) ||
                     value.length !== BinaryUtils.getSize(BinaryUtils.TYPE_CODE.UUID)) {
-                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode)
+                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode);
                 }
-                value.forEach(element => BinaryUtils.checkStandardTypeCompatibility(element, BinaryUtils.TYPE_CODE.BYTE))
-                return
+                value.forEach(element => BinaryUtils.checkStandardTypeCompatibility(element, BinaryUtils.TYPE_CODE.BYTE));
+                return;
             case BinaryUtils.TYPE_CODE.DATE:
                 if (!(value instanceof Date)) {
-                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode)
+                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode);
                 }
-                return
+                return;
             case BinaryUtils.TYPE_CODE.ENUM:
                 if (!(value instanceof internal_1.EnumItem)) {
-                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode)
+                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode);
                 }
-                return
+                return;
             case BinaryUtils.TYPE_CODE.DECIMAL:
                 if (!(value instanceof decimal_js_1.default)) {
-                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode)
+                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode);
                 }
-                return
+                return;
             case BinaryUtils.TYPE_CODE.TIMESTAMP:
                 if (!(value instanceof internal_1.Timestamp)) {
-                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode)
+                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode);
                 }
-                return
+                return;
             case BinaryUtils.TYPE_CODE.TIME:
                 if (!(value instanceof Date)) {
-                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode)
+                    throw internal_1.Errors.IgniteClientError.valueCastError(value, typeCode);
                 }
-                return
+                return;
             case BinaryUtils.TYPE_CODE.BYTE_ARRAY:
             case BinaryUtils.TYPE_CODE.SHORT_ARRAY:
             case BinaryUtils.TYPE_CODE.INTEGER_ARRAY:
@@ -413,134 +426,138 @@ class BinaryUtils {
             case BinaryUtils.TYPE_CODE.TIMESTAMP_ARRAY:
             case BinaryUtils.TYPE_CODE.TIME_ARRAY:
                 if (!(value instanceof Array)) {
-                    throw internal_1.Errors.IgniteClientError.typeCastError(valueType, typeCode)
+                    throw internal_1.Errors.IgniteClientError.typeCastError(valueType, typeCode);
                 }
-                return
+                return;
             case BinaryUtils.TYPE_CODE.MAP:
                 if (!(value instanceof Map)) {
-                    throw internal_1.Errors.IgniteClientError.typeCastError(valueType, typeCode)
+                    throw internal_1.Errors.IgniteClientError.typeCastError(valueType, typeCode);
                 }
-                return
+                return;
             case BinaryUtils.TYPE_CODE.COLLECTION:
                 if (!(type && type._isSet() && value instanceof Set || value instanceof Array)) {
-                    throw internal_1.Errors.IgniteClientError.typeCastError(valueType, type && type._isSet() ? 'set' : typeCode)
+                    throw internal_1.Errors.IgniteClientError.typeCastError(valueType, type && type._isSet() ? 'set' : typeCode);
                 }
-                return
+                return;
             case BinaryUtils.TYPE_CODE.NULL:
                 if (value !== null) {
-                    throw internal_1.Errors.IgniteClientError.typeCastError('not null', typeCode)
+                    throw internal_1.Errors.IgniteClientError.typeCastError('not null', typeCode);
                 }
-                return
+                return;
             default:
-                const valueTypeCode = BinaryUtils.getTypeCode(BinaryUtils.calcObjectType(value))
+                const valueTypeCode = BinaryUtils.getTypeCode(BinaryUtils.calcObjectType(value));
                 if (valueTypeCode === BinaryUtils.TYPE_CODE.BINARY_OBJECT) {
-                    throw internal_1.Errors.IgniteClientError.typeCastError(valueTypeCode, typeCode)
+                    throw internal_1.Errors.IgniteClientError.typeCastError(valueTypeCode, typeCode);
                 }
-                return
+                return;
         }
     }
     static checkTypesComatibility(expectedType, actualTypeCode) {
         if (expectedType === null) {
-            return
+            return;
         }
-        const expectedTypeCode = BinaryUtils.getTypeCode(expectedType)
+        const expectedTypeCode = BinaryUtils.getTypeCode(expectedType);
         if (actualTypeCode === BinaryUtils.TYPE_CODE.NULL) {
-            return
-        }        else if (expectedTypeCode === BinaryUtils.TYPE_CODE.BINARY_OBJECT ||
+            return;
+        }
+        else if (expectedTypeCode === BinaryUtils.TYPE_CODE.BINARY_OBJECT ||
             actualTypeCode === BinaryUtils.TYPE_CODE.BINARY_OBJECT &&
                 expectedTypeCode === BinaryUtils.TYPE_CODE.COMPLEX_OBJECT) {
-            return
-        }        else if (expectedTypeCode === BinaryUtils.TYPE_CODE.ENUM &&
+            return;
+        }
+        else if (expectedTypeCode === BinaryUtils.TYPE_CODE.ENUM &&
             actualTypeCode === BinaryUtils.TYPE_CODE.BINARY_ENUM) {
-            return
-        }        else if (actualTypeCode !== expectedTypeCode) {
-            throw internal_1.Errors.IgniteClientError.typeCastError(actualTypeCode, expectedTypeCode)
+            return;
+        }
+        else if (actualTypeCode !== expectedTypeCode) {
+            throw internal_1.Errors.IgniteClientError.typeCastError(actualTypeCode, expectedTypeCode);
         }
     }
     static getArrayElementType(arrayType) {
         if (arrayType instanceof internal_1.ObjectArrayType) {
-            return arrayType.elementType
-        }        else if (arrayType === BinaryUtils.TYPE_CODE.OBJECT_ARRAY) {
-            return null
+            return arrayType.elementType;
         }
-        const elementTypeCode = TYPE_INFO[arrayType].ELEMENT_TYPE
+        else if (arrayType === BinaryUtils.TYPE_CODE.OBJECT_ARRAY) {
+            return null;
+        }
+        const elementTypeCode = TYPE_INFO[arrayType].ELEMENT_TYPE;
         if (!elementTypeCode) {
-            throw internal_1.Errors.IgniteClientError.internalError()
+            throw internal_1.Errors.IgniteClientError.internalError();
         }
-        return elementTypeCode
+        return elementTypeCode;
     }
     static getArrayType(elementType) {
         switch (BinaryUtils.getTypeCode(elementType)) {
             case BinaryUtils.TYPE_CODE.BYTE:
-                return BinaryUtils.TYPE_CODE.BYTE_ARRAY
+                return BinaryUtils.TYPE_CODE.BYTE_ARRAY;
             case BinaryUtils.TYPE_CODE.SHORT:
-                return BinaryUtils.TYPE_CODE.SHORT_ARRAY
+                return BinaryUtils.TYPE_CODE.SHORT_ARRAY;
             case BinaryUtils.TYPE_CODE.INTEGER:
-                return BinaryUtils.TYPE_CODE.INTEGER_ARRAY
+                return BinaryUtils.TYPE_CODE.INTEGER_ARRAY;
             case BinaryUtils.TYPE_CODE.LONG:
-                return BinaryUtils.TYPE_CODE.LONG_ARRAY
+                return BinaryUtils.TYPE_CODE.LONG_ARRAY;
             case BinaryUtils.TYPE_CODE.FLOAT:
-                return BinaryUtils.TYPE_CODE.FLOAT_ARRAY
+                return BinaryUtils.TYPE_CODE.FLOAT_ARRAY;
             case BinaryUtils.TYPE_CODE.DOUBLE:
-                return BinaryUtils.TYPE_CODE.DOUBLE_ARRAY
+                return BinaryUtils.TYPE_CODE.DOUBLE_ARRAY;
             case BinaryUtils.TYPE_CODE.CHAR:
-                return BinaryUtils.TYPE_CODE.CHAR_ARRAY
+                return BinaryUtils.TYPE_CODE.CHAR_ARRAY;
             case BinaryUtils.TYPE_CODE.BOOLEAN:
-                return BinaryUtils.TYPE_CODE.BOOLEAN_ARRAY
+                return BinaryUtils.TYPE_CODE.BOOLEAN_ARRAY;
             case BinaryUtils.TYPE_CODE.STRING:
-                return BinaryUtils.TYPE_CODE.STRING_ARRAY
+                return BinaryUtils.TYPE_CODE.STRING_ARRAY;
             case BinaryUtils.TYPE_CODE.UUID:
-                return BinaryUtils.TYPE_CODE.UUID_ARRAY
+                return BinaryUtils.TYPE_CODE.UUID_ARRAY;
             case BinaryUtils.TYPE_CODE.DATE:
-                return BinaryUtils.TYPE_CODE.DATE_ARRAY
+                return BinaryUtils.TYPE_CODE.DATE_ARRAY;
             case BinaryUtils.TYPE_CODE.ENUM:
-                return BinaryUtils.TYPE_CODE.ENUM_ARRAY
+                return BinaryUtils.TYPE_CODE.ENUM_ARRAY;
             case BinaryUtils.TYPE_CODE.DECIMAL:
-                return BinaryUtils.TYPE_CODE.DECIMAL_ARRAY
+                return BinaryUtils.TYPE_CODE.DECIMAL_ARRAY;
             case BinaryUtils.TYPE_CODE.TIMESTAMP:
-                return BinaryUtils.TYPE_CODE.TIMESTAMP_ARRAY
+                return BinaryUtils.TYPE_CODE.TIMESTAMP_ARRAY;
             case BinaryUtils.TYPE_CODE.TIME:
-                return BinaryUtils.TYPE_CODE.TIME_ARRAY
+                return BinaryUtils.TYPE_CODE.TIME_ARRAY;
             case BinaryUtils.TYPE_CODE.BINARY_OBJECT:
-                return new internal_1.ObjectArrayType()
+                return new internal_1.ObjectArrayType();
             default:
-                return new internal_1.ObjectArrayType(elementType)
+                return new internal_1.ObjectArrayType(elementType);
         }
     }
     static keepArrayElementType(arrayTypeCode) {
-        return TYPE_INFO[arrayTypeCode].KEEP_ELEMENT_TYPE === true
+        return TYPE_INFO[arrayTypeCode].KEEP_ELEMENT_TYPE === true;
     }
     static getJsObjectFieldNames(jsObject) {
-        var fields = new Array()
+        var fields = new Array();
         for (let field in jsObject) {
             if (typeof jsObject[field] !== 'function') {
-                fields.push(field)
+                fields.push(field);
             }
         }
-        return fields
+        return fields;
     }
     static hashCode(str) {
-        let hash = 0, char
+        let hash = 0, char;
         if (str && str.length > 0) {
             for (let i = 0; i < str.length; i++) {
-                char = str.charCodeAt(i)
-                hash = ((hash << 5) - hash) + char
-                hash |= 0 // Convert to 32bit integer
+                char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash |= 0; // Convert to 32bit integer
             }
         }
-        return hash
+        return hash;
     }
     static hashCodeLowerCase(str) {
-        return BinaryUtils.hashCode(str ? str.toLowerCase() : str)
+        return BinaryUtils.hashCode(str ? str.toLowerCase() : str);
     }
     static contentHashCode(buffer, startPos, endPos) {
-        let hash = 1
+        let hash = 1;
         for (let i = startPos; i <= endPos; i++) {
-            hash = 31 * hash + buffer._buffer[i]
-            hash |= 0 // Convert to 32bit integer
+            hash = 31 * hash + buffer._buffer[i];
+            hash |= 0; // Convert to 32bit integer
         }
-        return hash
+        return hash;
     }
 }
-exports.BinaryUtils = BinaryUtils
-// # sourceMappingURL=BinaryUtils.js.map
+exports.BinaryUtils = BinaryUtils;
+//# sourceMappingURL=BinaryUtils.js.map

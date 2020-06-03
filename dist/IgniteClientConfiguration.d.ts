@@ -13,6 +13,7 @@ export declare class IgniteClientConfiguration {
     private _password;
     private _useTLS;
     private _options;
+    private _zkRoot;
     /**
      * Creates an instance of Ignite client configuration
      * with the provided mandatory settings and default optional settings.
@@ -66,4 +67,6 @@ export declare class IgniteClientConfiguration {
      * @return {IgniteClientConfiguration} - the same instance of the IgniteClientConfiguration.
      */
     setConnectionOptions(useTLS: any, connectionOptions?: any): this;
+    setZkRoot(zkRoot: string): void;
+    getZkRoot(): any;
 }

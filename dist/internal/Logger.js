@@ -14,31 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict'
-Object.defineProperty(exports, '__esModule', { value: true })
-exports.Logger = void 0
+'use strict';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Logger = void 0;
 /** Utility class for logging errors and debug messages. */
 let Logger = /** @class */ (() => {
     class Logger {
         static get debug() {
-            return Logger._debug
+            return Logger._debug;
         }
         static set debug(value) {
-            Logger._debug = value
+            Logger._debug = value;
         }
         static logDebug(data, ...args) {
             if (Logger._debug) {
-                console.log(data, ...args)
+                console.log(data, ...args);
             }
         }
         static logError(data, ...args) {
             if (Logger._debug) {
-                console.log('ERROR: ' + data, ...args)
+                console.log('ERROR: ' + data, ...args);
             }
         }
     }
-    Logger._debug = false
-    return Logger
-})()
-exports.Logger = Logger
-// # sourceMappingURL=Logger.js.map
+    Logger._debug = false;
+    return Logger;
+})();
+exports.Logger = Logger;
+//# sourceMappingURL=Logger.js.map

@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict'
-var __awaiter = (this && this.__awaiter) || function(thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function(resolve) { resolve(value) }) }
-    return new (P || (P = Promise))(function(resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)) } catch (e) { reject(e) } }
-        function rejected(value) { try { step(generator['throw'](value)) } catch (e) { reject(e) } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected) }
-        step((generator = generator.apply(thisArg, _arguments || [])).next())
-    })
-}
-Object.defineProperty(exports, '__esModule', { value: true })
-exports.CacheEntry = exports.CacheClient = void 0
-const internal_1 = require('./internal')
+'use strict';
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CacheEntry = exports.CacheClient = void 0;
+const internal_1 = require("./internal");
 /**
  * Peek modes
  * @typedef CacheClient.PEEK_MODE
@@ -42,7 +42,7 @@ const PEEK_MODE = Object.freeze({
     NEAR: 1,
     PRIMARY: 2,
     BACKUP: 3
-})
+});
 /**
  * Class representing and providing access to Ignite cache.
  *
@@ -64,15 +64,15 @@ class CacheClient {
      * @ignore
      */
     constructor(name, config, communicator) {
-        this._name = name
-        this._cacheId = CacheClient._calculateId(this._name)
-        this._config = config
-        this._keyType = null
-        this._valueType = null
-        this._communicator = communicator
+        this._name = name;
+        this._cacheId = CacheClient._calculateId(this._name);
+        this._config = config;
+        this._keyType = null;
+        this._valueType = null;
+        this._communicator = communicator;
     }
     static get PEEK_MODE() {
-        return PEEK_MODE
+        return PEEK_MODE;
     }
     /* Methods to configure the cache client */
     /**
@@ -99,9 +99,9 @@ class CacheClient {
      * @throws {IgniteClientError} if error.
      */
     setKeyType(type) {
-        internal_1.BinaryUtils.checkObjectType(type, 'type')
-        this._keyType = type
-        return this
+        internal_1.BinaryUtils.checkObjectType(type, 'type');
+        this._keyType = type;
+        return this;
     }
     /**
      * Specifies a type of the cache value.
@@ -127,9 +127,9 @@ class CacheClient {
      * @throws {IgniteClientError} if error.
      */
     setValueType(type) {
-        internal_1.BinaryUtils.checkObjectType(type, 'type')
-        this._valueType = type
-        return this
+        internal_1.BinaryUtils.checkObjectType(type, 'type');
+        this._valueType = type;
+        return this;
     }
     /* Methods to operate with the cache using Key-Value Queries */
     /**
@@ -145,8 +145,8 @@ class CacheClient {
      */
     get(key) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this._writeKeyReadValueOp(internal_1.BinaryUtils.OPERATION.CACHE_GET, key)
-        })
+            return yield this._writeKeyReadValueOp(internal_1.BinaryUtils.OPERATION.CACHE_GET, key);
+        });
     }
     /**
      * Retrieves entries associated with the specified keys from the cache.
@@ -162,21 +162,21 @@ class CacheClient {
      */
     getAll(keys) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.ArgumentChecker.notEmpty(keys, 'keys')
-            internal_1.ArgumentChecker.hasType(keys, 'keys', false, Array)
-            let result = null
+            internal_1.ArgumentChecker.notEmpty(keys, 'keys');
+            internal_1.ArgumentChecker.hasType(keys, 'keys', false, Array);
+            let result = null;
             yield this._communicator.send(internal_1.BinaryUtils.OPERATION.CACHE_GET_ALL, (payload) => __awaiter(this, void 0, void 0, function* () {
-                this._writeCacheInfo(payload)
-                yield this._writeKeys(payload, keys)
+                this._writeCacheInfo(payload);
+                yield this._writeKeys(payload, keys);
             }), (payload) => __awaiter(this, void 0, void 0, function* () {
-                const resultCount = payload.readInteger()
-                result = new Array(resultCount)
+                const resultCount = payload.readInteger();
+                result = new Array(resultCount);
                 for (let i = 0; i < resultCount; i++) {
-                    result[i] = new CacheEntry(yield this._communicator.readObject(payload, this._getKeyType()), yield this._communicator.readObject(payload, this._getValueType()))
+                    result[i] = new CacheEntry(yield this._communicator.readObject(payload, this._getKeyType()), yield this._communicator.readObject(payload, this._getValueType()));
                 }
-            }))
-            return result
-        })
+            }));
+            return result;
+        });
     }
     /**
      * Associates the specified value with the specified key in the cache.
@@ -193,8 +193,8 @@ class CacheClient {
      */
     put(key, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this._writeKeyValueOp(internal_1.BinaryUtils.OPERATION.CACHE_PUT, key, value)
-        })
+            yield this._writeKeyValueOp(internal_1.BinaryUtils.OPERATION.CACHE_PUT, key, value);
+        });
     }
     /**
      * Associates the specified values with the specified keys in the cache.
@@ -210,16 +210,16 @@ class CacheClient {
      */
     putAll(entries) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.ArgumentChecker.notEmpty(entries, 'entries')
-            internal_1.ArgumentChecker.hasType(entries, 'entries', true, CacheEntry)
+            internal_1.ArgumentChecker.notEmpty(entries, 'entries');
+            internal_1.ArgumentChecker.hasType(entries, 'entries', true, CacheEntry);
             yield this._communicator.send(internal_1.BinaryUtils.OPERATION.CACHE_PUT_ALL, (payload) => __awaiter(this, void 0, void 0, function* () {
-                this._writeCacheInfo(payload)
-                payload.writeInteger(entries.length)
+                this._writeCacheInfo(payload);
+                payload.writeInteger(entries.length);
                 for (let entry of entries) {
-                    yield this._writeKeyValue(payload, entry.getKey(), entry.getValue())
+                    yield this._writeKeyValue(payload, entry.getKey(), entry.getValue());
                 }
-            }))
-        })
+            }));
+        });
     }
     /**
      * Checks if the specified key exists in the cache.
@@ -234,8 +234,8 @@ class CacheClient {
      */
     containsKey(key) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this._writeKeyReadBooleanOp(internal_1.BinaryUtils.OPERATION.CACHE_CONTAINS_KEY, key)
-        })
+            return yield this._writeKeyReadBooleanOp(internal_1.BinaryUtils.OPERATION.CACHE_CONTAINS_KEY, key);
+        });
     }
     /**
      * Checks if all the specified keys exist in the cache.
@@ -251,8 +251,8 @@ class CacheClient {
      */
     containsKeys(keys) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this._writeKeysReadBooleanOp(internal_1.BinaryUtils.OPERATION.CACHE_CONTAINS_KEYS, keys)
-        })
+            return yield this._writeKeysReadBooleanOp(internal_1.BinaryUtils.OPERATION.CACHE_CONTAINS_KEYS, keys);
+        });
     }
     /**
      * Associates the specified value with the specified key in the cache
@@ -272,8 +272,8 @@ class CacheClient {
      */
     getAndPut(key, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this._writeKeyValueReadValueOp(internal_1.BinaryUtils.OPERATION.CACHE_GET_AND_PUT, key, value)
-        })
+            return yield this._writeKeyValueReadValueOp(internal_1.BinaryUtils.OPERATION.CACHE_GET_AND_PUT, key, value);
+        });
     }
     /**
      * Associates the specified value with the specified key in the cache
@@ -291,8 +291,8 @@ class CacheClient {
      */
     getAndReplace(key, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this._writeKeyValueReadValueOp(internal_1.BinaryUtils.OPERATION.CACHE_GET_AND_REPLACE, key, value)
-        })
+            return yield this._writeKeyValueReadValueOp(internal_1.BinaryUtils.OPERATION.CACHE_GET_AND_REPLACE, key, value);
+        });
     }
     /**
      * Removes the cache entry with the specified key
@@ -308,8 +308,8 @@ class CacheClient {
      */
     getAndRemove(key) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this._writeKeyReadValueOp(internal_1.BinaryUtils.OPERATION.CACHE_GET_AND_REMOVE, key)
-        })
+            return yield this._writeKeyReadValueOp(internal_1.BinaryUtils.OPERATION.CACHE_GET_AND_REMOVE, key);
+        });
     }
     /**
      * Creates new entry (key-value pair) if the specified key does not exist in the cache.
@@ -326,8 +326,8 @@ class CacheClient {
      */
     putIfAbsent(key, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this._writeKeyValueReadBooleanOp(internal_1.BinaryUtils.OPERATION.CACHE_PUT_IF_ABSENT, key, value)
-        })
+            return yield this._writeKeyValueReadBooleanOp(internal_1.BinaryUtils.OPERATION.CACHE_PUT_IF_ABSENT, key, value);
+        });
     }
     /**
      * Creates new entry (key-value pair) if the specified key does not exist in the cache.
@@ -345,8 +345,8 @@ class CacheClient {
      */
     getAndPutIfAbsent(key, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this._writeKeyValueReadValueOp(internal_1.BinaryUtils.OPERATION.CACHE_GET_AND_PUT_IF_ABSENT, key, value)
-        })
+            return yield this._writeKeyValueReadValueOp(internal_1.BinaryUtils.OPERATION.CACHE_GET_AND_PUT_IF_ABSENT, key, value);
+        });
     }
     /**
      * Associates the specified value with the specified key, if the key exists in the cache.
@@ -363,8 +363,8 @@ class CacheClient {
      */
     replace(key, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this._writeKeyValueReadBooleanOp(internal_1.BinaryUtils.OPERATION.CACHE_REPLACE, key, value)
-        })
+            return yield this._writeKeyValueReadBooleanOp(internal_1.BinaryUtils.OPERATION.CACHE_REPLACE, key, value);
+        });
     }
     /**
      * Associates the new value with the specified key, if the key exists in the cache
@@ -383,19 +383,19 @@ class CacheClient {
      */
     replaceIfEquals(key, value, newValue) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.ArgumentChecker.notNull(key, 'key')
-            internal_1.ArgumentChecker.notNull(value, 'value')
-            internal_1.ArgumentChecker.notNull(newValue, 'newValue')
-            let result
+            internal_1.ArgumentChecker.notNull(key, 'key');
+            internal_1.ArgumentChecker.notNull(value, 'value');
+            internal_1.ArgumentChecker.notNull(newValue, 'newValue');
+            let result;
             yield this._communicator.send(internal_1.BinaryUtils.OPERATION.CACHE_REPLACE_IF_EQUALS, (payload) => __awaiter(this, void 0, void 0, function* () {
-                this._writeCacheInfo(payload)
-                yield this._writeKeyValue(payload, key, value)
-                yield this._communicator.writeObject(payload, newValue, this._getValueType())
+                this._writeCacheInfo(payload);
+                yield this._writeKeyValue(payload, key, value);
+                yield this._communicator.writeObject(payload, newValue, this._getValueType());
             }), (payload) => __awaiter(this, void 0, void 0, function* () {
-                result = payload.readBoolean()
-            }))
-            return result
-        })
+                result = payload.readBoolean();
+            }));
+            return result;
+        });
     }
     /**
      * Removes all entries from the cache, without notifying listeners and cache writers.
@@ -407,9 +407,9 @@ class CacheClient {
     clear() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._communicator.send(internal_1.BinaryUtils.OPERATION.CACHE_CLEAR, (payload) => __awaiter(this, void 0, void 0, function* () {
-                this._writeCacheInfo(payload)
-            }))
-        })
+                this._writeCacheInfo(payload);
+            }));
+        });
     }
     /**
      * Removes entry with the specified key from the cache, without notifying listeners and cache writers.
@@ -422,8 +422,8 @@ class CacheClient {
      */
     clearKey(key) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this._writeKeyOp(internal_1.BinaryUtils.OPERATION.CACHE_CLEAR_KEY, key)
-        })
+            yield this._writeKeyOp(internal_1.BinaryUtils.OPERATION.CACHE_CLEAR_KEY, key);
+        });
     }
     /**
      * Removes entries with the specified keys from the cache, without notifying listeners and cache writers.
@@ -436,8 +436,8 @@ class CacheClient {
      */
     clearKeys(keys) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this._writeKeysOp(internal_1.BinaryUtils.OPERATION.CACHE_CLEAR_KEYS, keys)
-        })
+            yield this._writeKeysOp(internal_1.BinaryUtils.OPERATION.CACHE_CLEAR_KEYS, keys);
+        });
     }
     /**
      * Removes entry with the specified key from the cache, notifying listeners and cache writers.
@@ -452,8 +452,8 @@ class CacheClient {
      */
     removeKey(key) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this._writeKeyReadBooleanOp(internal_1.BinaryUtils.OPERATION.CACHE_REMOVE_KEY, key)
-        })
+            return yield this._writeKeyReadBooleanOp(internal_1.BinaryUtils.OPERATION.CACHE_REMOVE_KEY, key);
+        });
     }
     /**
      * Removes entry with the specified key from the cache, if the current value equals to the provided one.
@@ -470,8 +470,8 @@ class CacheClient {
      */
     removeIfEquals(key, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this._writeKeyValueReadBooleanOp(internal_1.BinaryUtils.OPERATION.CACHE_REMOVE_IF_EQUALS, key, value)
-        })
+            return yield this._writeKeyValueReadBooleanOp(internal_1.BinaryUtils.OPERATION.CACHE_REMOVE_IF_EQUALS, key, value);
+        });
     }
     /**
      * Removes entries with the specified keys from the cache, notifying listeners and cache writers.
@@ -484,8 +484,8 @@ class CacheClient {
      */
     removeKeys(keys) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this._writeKeysOp(internal_1.BinaryUtils.OPERATION.CACHE_REMOVE_KEYS, keys)
-        })
+            yield this._writeKeysOp(internal_1.BinaryUtils.OPERATION.CACHE_REMOVE_KEYS, keys);
+        });
     }
     /**
      * Removes all entries from the cache, notifying listeners and cache writers.
@@ -497,9 +497,9 @@ class CacheClient {
     removeAll() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._communicator.send(internal_1.BinaryUtils.OPERATION.CACHE_REMOVE_ALL, (payload) => __awaiter(this, void 0, void 0, function* () {
-                this._writeCacheInfo(payload)
-            }))
-        })
+                this._writeCacheInfo(payload);
+            }));
+        });
     }
     /**
      * Returns the number of the entries in the cache.
@@ -514,19 +514,19 @@ class CacheClient {
      */
     getSize(...peekModes) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.ArgumentChecker.hasValueFrom(peekModes, 'peekModes', true, CacheClient.PEEK_MODE)
-            let result
+            internal_1.ArgumentChecker.hasValueFrom(peekModes, 'peekModes', true, CacheClient.PEEK_MODE);
+            let result;
             yield this._communicator.send(internal_1.BinaryUtils.OPERATION.CACHE_GET_SIZE, (payload) => __awaiter(this, void 0, void 0, function* () {
-                this._writeCacheInfo(payload)
-                payload.writeInteger(peekModes.length)
+                this._writeCacheInfo(payload);
+                payload.writeInteger(peekModes.length);
                 for (let mode of peekModes) {
-                    payload.writeByte(mode)
+                    payload.writeByte(mode);
                 }
             }), (payload) => __awaiter(this, void 0, void 0, function* () {
-                result = payload.readLong().toNumber()
-            }))
-            return result
-        })
+                result = payload.readLong().toNumber();
+            }));
+            return result;
+        });
     }
     /* Methods to operate with the cache using SQL and Scan Queries */
     /**
@@ -544,163 +544,163 @@ class CacheClient {
      */
     query(query) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.ArgumentChecker.notNull(query, 'query')
-            internal_1.ArgumentChecker.hasType(query, 'query', false, internal_1.SqlQuery, internal_1.SqlFieldsQuery, internal_1.ScanQuery)
-            let value = null
+            internal_1.ArgumentChecker.notNull(query, 'query');
+            internal_1.ArgumentChecker.hasType(query, 'query', false, internal_1.SqlQuery, internal_1.SqlFieldsQuery, internal_1.ScanQuery);
+            let value = null;
             yield this._communicator.send(query.operation, (payload) => __awaiter(this, void 0, void 0, function* () {
-                this._writeCacheInfo(payload)
-                yield query._write(this._communicator, payload)
+                this._writeCacheInfo(payload);
+                yield query._write(this._communicator, payload);
             }), (payload) => __awaiter(this, void 0, void 0, function* () {
-                value = yield query._getCursor(this._communicator, payload, this._keyType, this._valueType)
-            }))
-            return value
-        })
+                value = yield query._getCursor(this._communicator, payload, this._keyType, this._valueType);
+            }));
+            return value;
+        });
     }
     /**
      * @ignore
      */
     static _calculateId(name) {
-        return internal_1.BinaryUtils.hashCode(name)
+        return internal_1.BinaryUtils.hashCode(name);
     }
     /**
      * @ignore
      */
     _writeCacheInfo(payload) {
-        payload.writeInteger(this._cacheId)
-        payload.writeByte(0)
+        payload.writeInteger(this._cacheId);
+        payload.writeByte(0);
     }
     /**
      * @ignore
      */
     _writeKeyValue(payload, key, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this._communicator.writeObject(payload, key, this._getKeyType())
-            yield this._communicator.writeObject(payload, value, this._getValueType())
-        })
+            yield this._communicator.writeObject(payload, key, this._getKeyType());
+            yield this._communicator.writeObject(payload, value, this._getValueType());
+        });
     }
     /**
      * @ignore
      */
     _writeKeys(payload, keys) {
         return __awaiter(this, void 0, void 0, function* () {
-            payload.writeInteger(keys.length)
+            payload.writeInteger(keys.length);
             for (let key of keys) {
-                yield this._communicator.writeObject(payload, key, this._getKeyType())
+                yield this._communicator.writeObject(payload, key, this._getKeyType());
             }
-        })
+        });
     }
     /**
      * @ignore
      */
     _getKeyType() {
-        return this._keyType
+        return this._keyType;
     }
     /**
      * @ignore
      */
     _getValueType() {
-        return this._valueType
+        return this._valueType;
     }
     /**
      * @ignore
      */
     _writeKeyValueOp(operation, key, value, payloadReader = null) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.ArgumentChecker.notNull(key, 'key')
-            internal_1.ArgumentChecker.notNull(value, 'value')
+            internal_1.ArgumentChecker.notNull(key, 'key');
+            internal_1.ArgumentChecker.notNull(value, 'value');
             yield this._communicator.send(operation, (payload) => __awaiter(this, void 0, void 0, function* () {
-                this._writeCacheInfo(payload)
-                yield this._writeKeyValue(payload, key, value)
-            }), payloadReader)
-        })
+                this._writeCacheInfo(payload);
+                yield this._writeKeyValue(payload, key, value);
+            }), payloadReader);
+        });
     }
     /**
      * @ignore
      */
     _writeKeyValueReadValueOp(operation, key, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            let result = null
+            let result = null;
             yield this._writeKeyValueOp(operation, key, value, (payload) => __awaiter(this, void 0, void 0, function* () {
-                result = yield this._communicator.readObject(payload, this._getValueType())
-            }))
-            return result
-        })
+                result = yield this._communicator.readObject(payload, this._getValueType());
+            }));
+            return result;
+        });
     }
     /**
      * @ignore
      */
     _writeKeyValueReadBooleanOp(operation, key, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            let result = false
+            let result = false;
             yield this._writeKeyValueOp(operation, key, value, (payload) => __awaiter(this, void 0, void 0, function* () {
-                result = payload.readBoolean()
-            }))
-            return result
-        })
+                result = payload.readBoolean();
+            }));
+            return result;
+        });
     }
     /**
      * @ignore
      */
     _writeKeyOp(operation, key, payloadReader = null) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.ArgumentChecker.notNull(key, 'key')
+            internal_1.ArgumentChecker.notNull(key, 'key');
             yield this._communicator.send(operation, (payload) => __awaiter(this, void 0, void 0, function* () {
-                this._writeCacheInfo(payload)
-                yield this._communicator.writeObject(payload, key, this._getKeyType())
-            }), payloadReader)
-        })
+                this._writeCacheInfo(payload);
+                yield this._communicator.writeObject(payload, key, this._getKeyType());
+            }), payloadReader);
+        });
     }
     /**
      * @ignore
      */
     _writeKeyReadValueOp(operation, key) {
         return __awaiter(this, void 0, void 0, function* () {
-            let value = null
+            let value = null;
             yield this._writeKeyOp(operation, key, (payload) => __awaiter(this, void 0, void 0, function* () {
-                value = yield this._communicator.readObject(payload, this._getValueType())
-            }))
-            return value
-        })
+                value = yield this._communicator.readObject(payload, this._getValueType());
+            }));
+            return value;
+        });
     }
     /**
      * @ignore
      */
     _writeKeyReadBooleanOp(operation, key) {
         return __awaiter(this, void 0, void 0, function* () {
-            let result = false
+            let result = false;
             yield this._writeKeyOp(operation, key, (payload) => __awaiter(this, void 0, void 0, function* () {
-                result = payload.readBoolean()
-            }))
-            return result
-        })
+                result = payload.readBoolean();
+            }));
+            return result;
+        });
     }
     /**
      * @ignore
      */
     _writeKeysOp(operation, keys, payloadReader = null) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.ArgumentChecker.notEmpty(keys, 'keys')
-            internal_1.ArgumentChecker.hasType(keys, 'keys', false, Array)
+            internal_1.ArgumentChecker.notEmpty(keys, 'keys');
+            internal_1.ArgumentChecker.hasType(keys, 'keys', false, Array);
             yield this._communicator.send(operation, (payload) => __awaiter(this, void 0, void 0, function* () {
-                this._writeCacheInfo(payload)
-                yield this._writeKeys(payload, keys)
-            }), payloadReader)
-        })
+                this._writeCacheInfo(payload);
+                yield this._writeKeys(payload, keys);
+            }), payloadReader);
+        });
     }
     /**
      * @ignore
      */
     _writeKeysReadBooleanOp(operation, keys) {
         return __awaiter(this, void 0, void 0, function* () {
-            let result = false
+            let result = false;
             yield this._writeKeysOp(operation, keys, (payload) => __awaiter(this, void 0, void 0, function* () {
-                result = payload.readBoolean()
-            }))
-            return result
-        })
+                result = payload.readBoolean();
+            }));
+            return result;
+        });
     }
 }
-exports.CacheClient = CacheClient
+exports.CacheClient = CacheClient;
 /**
  * A cache entry (key-value pair).
  */
@@ -714,8 +714,8 @@ class CacheEntry {
      * @return {CacheEntry} - new CacheEntry instance
      */
     constructor(key, value) {
-        this._key = key
-        this._value = value
+        this._key = key;
+        this._value = value;
     }
     /**
      * Returns the key corresponding to this entry.
@@ -723,7 +723,7 @@ class CacheEntry {
      * @return {*} - the key corresponding to this entry.
      */
     getKey() {
-        return this._key
+        return this._key;
     }
     /**
      * Returns the value corresponding to this entry.
@@ -731,8 +731,8 @@ class CacheEntry {
      * @return {*} - the value corresponding to this entry.
      */
     getValue() {
-        return this._value
+        return this._value;
     }
 }
-exports.CacheEntry = CacheEntry
-// # sourceMappingURL=CacheClient.js.map
+exports.CacheEntry = CacheEntry;
+//# sourceMappingURL=CacheClient.js.map
