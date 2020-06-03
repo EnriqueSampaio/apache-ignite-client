@@ -37,6 +37,7 @@ export class IgniteClientConfiguration {
     private _password: any;
     private _useTLS: boolean;
     private _options: any;
+    private _zkRoot: any;
     
     /**
      * Creates an instance of Ignite client configuration
@@ -58,6 +59,7 @@ export class IgniteClientConfiguration {
         this._password = null;
         this._useTLS = false;
         this._options = null;
+        this._zkRoot = null;
     }
 
 
@@ -111,6 +113,14 @@ export class IgniteClientConfiguration {
         this._useTLS = useTLS;
         this._options = connectionOptions;
         return this;
+    }
+
+    setZkRoot(zkRoot: string) {
+        this._zkRoot = zkRoot;
+    }
+
+    getZkRoot() {
+        return this._zkRoot;
     }
 }
 
