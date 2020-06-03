@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SqlFieldsCursor = exports.Cursor = void 0;
+'use strict'
+var __awaiter = (this && this.__awaiter) || function(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function(resolve) { resolve(value) }) }
+    return new (P || (P = Promise))(function(resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)) } catch (e) { reject(e) } }
+        function rejected(value) { try { step(generator['throw'](value)) } catch (e) { reject(e) } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected) }
+        step((generator = generator.apply(thisArg, _arguments || [])).next())
+    })
+}
+Object.defineProperty(exports, '__esModule', { value: true })
+exports.SqlFieldsCursor = exports.Cursor = void 0
 /*
 import * as Errors from './Errors';
 import { BinaryUtils } from './internal/BinaryUtils';
 import { BinaryObject } from './BinaryObject';
 import { BinaryCommunicator } from './internal/BinaryCommunicator';
-import { CacheEntry } from './CacheClient';*/
-const internal_1 = require("./internal");
+import { CacheEntry } from './CacheClient'; */
+const internal_1 = require('./internal')
 /**
  * Class representing a cursor to obtain results of SQL and Scan query operations.
  *
@@ -48,15 +48,15 @@ class Cursor {
      * @ignore
      */
     constructor(communicator, operation, buffer, keyType = null, valueType = null) {
-        this._communicator = communicator;
-        this._operation = operation;
-        this._buffer = buffer;
-        this._keyType = keyType;
-        this._valueType = valueType;
-        this._id = null;
-        this._hasNext = false;
-        this._values = null;
-        this._valueIndex = 0;
+        this._communicator = communicator
+        this._operation = operation
+        this._buffer = buffer
+        this._keyType = keyType
+        this._valueType = valueType
+        this._id = null
+        this._hasNext = false
+        this._values = null
+        this._valueIndex = 0
     }
     /**
      * Returns one element (cache entry - key-value pair) from the query results.
@@ -71,16 +71,16 @@ class Cursor {
     getValue() {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._values || this._valueIndex >= this._values.length) {
-                yield this._getValues();
-                this._valueIndex = 0;
+                yield this._getValues()
+                this._valueIndex = 0
             }
             if (this._values && this._values.length > 0) {
-                const value = this._values[this._valueIndex];
-                this._valueIndex++;
-                return value;
+                const value = this._values[this._valueIndex]
+                this._valueIndex++
+                return value
             }
-            return null;
-        });
+            return null
+        })
     }
     /**
      * Checks if more elements are available in the query results.
@@ -89,7 +89,7 @@ class Cursor {
      */
     hasMore() {
         return this._hasNext ||
-            this._values && this._valueIndex < this._values.length;
+            this._values && this._valueIndex < this._values.length
     }
     /**
      * Returns all elements (cache entries - key-value pairs) from the query results.
@@ -104,16 +104,16 @@ class Cursor {
      */
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            let result = new Array();
-            let values;
+            let result = new Array()
+            let values
             do {
-                values = yield this._getValues();
+                values = yield this._getValues()
                 if (values) {
-                    result = result.concat(values);
+                    result = result.concat(values)
                 }
-            } while (this._hasNext);
-            return result;
-        });
+            } while (this._hasNext)
+            return result
+        })
     }
     /**
      * Closes the cursor. Obtaining elements from the results is not possible after this.
@@ -128,25 +128,25 @@ class Cursor {
             // Close cursor only if the server has more pages: the server closes cursor automatically on last page
             if (this._id && this._hasNext) {
                 yield this._communicator.send(internal_1.BinaryUtils.OPERATION.RESOURCE_CLOSE, (payload) => __awaiter(this, void 0, void 0, function* () {
-                    yield this._write(payload);
-                }));
+                    yield this._write(payload)
+                }))
             }
-        });
+        })
     }
     /**
      * @ignore
      */
     _getNext() {
         return __awaiter(this, void 0, void 0, function* () {
-            this._hasNext = false;
-            this._values = null;
-            this._buffer = null;
+            this._hasNext = false
+            this._values = null
+            this._buffer = null
             yield this._communicator.send(this._operation, (payload) => __awaiter(this, void 0, void 0, function* () {
-                yield this._write(payload);
+                yield this._write(payload)
             }), (payload) => __awaiter(this, void 0, void 0, function* () {
-                this._buffer = payload;
-            }));
-        });
+                this._buffer = payload
+            }))
+        })
     }
     /**
      * @ignore
@@ -154,50 +154,50 @@ class Cursor {
     _getValues() {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._buffer && this._hasNext) {
-                yield this._getNext();
+                yield this._getNext()
             }
-            yield this._read(this._buffer);
-            this._buffer = null;
-            return this._values;
-        });
+            yield this._read(this._buffer)
+            this._buffer = null
+            return this._values
+        })
     }
     /**
      * @ignore
      */
     _write(buffer) {
         return __awaiter(this, void 0, void 0, function* () {
-            buffer.writeLong(this._id);
-        });
+            buffer.writeLong(this._id)
+        })
     }
     /**
      * @ignore
      */
     _readId(buffer) {
-        this._id = buffer.readLong();
+        this._id = buffer.readLong()
     }
     /**
      * @ignore
      */
     _readRow(buffer) {
         return __awaiter(this, void 0, void 0, function* () {
-            return new internal_1.CacheEntry(yield this._communicator.readObject(buffer, this._keyType), yield this._communicator.readObject(buffer, this._valueType));
-        });
+            return new internal_1.CacheEntry(yield this._communicator.readObject(buffer, this._keyType), yield this._communicator.readObject(buffer, this._valueType))
+        })
     }
     /**
      * @ignore
      */
     _read(buffer) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rowCount = buffer.readInteger();
-            this._values = new Array(rowCount);
+            const rowCount = buffer.readInteger()
+            this._values = new Array(rowCount)
             for (let i = 0; i < rowCount; i++) {
-                this._values[i] = yield this._readRow(buffer);
+                this._values[i] = yield this._readRow(buffer)
             }
-            this._hasNext = buffer.readBoolean();
-        });
+            this._hasNext = buffer.readBoolean()
+        })
     }
 }
-exports.Cursor = Cursor;
+exports.Cursor = Cursor
 /**
  * Class representing a cursor to obtain results of SQL Fields query operation.
  *
@@ -214,8 +214,8 @@ class SqlFieldsCursor extends Cursor {
      * @ignore
      */
     constructor(communicator, buffer) {
-        super(communicator, internal_1.BinaryUtils.OPERATION.QUERY_SQL_FIELDS_CURSOR_GET_PAGE, buffer);
-        this._fieldNames = [];
+        super(communicator, internal_1.BinaryUtils.OPERATION.QUERY_SQL_FIELDS_CURSOR_GET_PAGE, buffer)
+        this._fieldNames = []
     }
     /**
      * Returns one element (array with values of the fields) from the query results.
@@ -231,10 +231,10 @@ class SqlFieldsCursor extends Cursor {
     getValue() {
         const _super = Object.create(null, {
             getValue: { get: () => super.getValue }
-        });
+        })
         return __awaiter(this, void 0, void 0, function* () {
-            return yield _super.getValue.call(this);
-        });
+            return yield _super.getValue.call(this)
+        })
     }
     /**
      * Returns all elements (arrays with values of the fields) from the query results.
@@ -251,10 +251,10 @@ class SqlFieldsCursor extends Cursor {
     getAll() {
         const _super = Object.create(null, {
             getAll: { get: () => super.getAll }
-        });
+        })
         return __awaiter(this, void 0, void 0, function* () {
-            return yield _super.getAll.call(this);
-        });
+            return yield _super.getAll.call(this)
+        })
     }
     /**
      * Returns names of the fields which were requested in the SQL Fields query.
@@ -265,7 +265,7 @@ class SqlFieldsCursor extends Cursor {
      *   The order of names corresponds to the order of field values returned in the results of the query.
      */
     getFieldNames() {
-        return this._fieldNames;
+        return this._fieldNames
     }
     /**
      * Specifies types of the fields returned by the SQL Fields query.
@@ -284,37 +284,37 @@ class SqlFieldsCursor extends Cursor {
      * @return {SqlFieldsCursor} - the same instance of the SqlFieldsCursor.
      */
     setFieldTypes(...fieldTypes) {
-        this._fieldTypes = fieldTypes;
-        return this;
+        this._fieldTypes = fieldTypes
+        return this
     }
     /**
      * @ignore
      */
     _readFieldNames(buffer, includeFieldNames) {
         return __awaiter(this, void 0, void 0, function* () {
-            this._id = buffer.readLong();
-            this._fieldCount = buffer.readInteger();
+            this._id = buffer.readLong()
+            this._fieldCount = buffer.readInteger()
             if (includeFieldNames) {
                 for (let i = 0; i < this._fieldCount; i++) {
-                    this._fieldNames[i] = yield this._communicator.readObject(buffer);
+                    this._fieldNames[i] = yield this._communicator.readObject(buffer)
                 }
             }
-        });
+        })
     }
     /**
      * @ignore
      */
     _readRow(buffer) {
         return __awaiter(this, void 0, void 0, function* () {
-            let values = new Array(this._fieldCount);
-            let fieldType;
+            let values = new Array(this._fieldCount)
+            let fieldType
             for (let i = 0; i < this._fieldCount; i++) {
-                fieldType = this._fieldTypes && i < this._fieldTypes.length ? this._fieldTypes[i] : null;
-                values[i] = yield this._communicator.readObject(buffer, fieldType);
+                fieldType = this._fieldTypes && i < this._fieldTypes.length ? this._fieldTypes[i] : null
+                values[i] = yield this._communicator.readObject(buffer, fieldType)
             }
-            return values;
-        });
+            return values
+        })
     }
 }
-exports.SqlFieldsCursor = SqlFieldsCursor;
-//# sourceMappingURL=Cursor.js.map
+exports.SqlFieldsCursor = SqlFieldsCursor
+// # sourceMappingURL=Cursor.js.map

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.IgniteClientConfiguration = void 0;
+'use strict'
+Object.defineProperty(exports, '__esModule', { value: true })
+exports.IgniteClientConfiguration = void 0
 // import * as FS from 'fs';
 // import * as Util from "util";
 // import * as Errors from './Errors';
-const internal_1 = require("./internal");
+const internal_1 = require('./internal')
 /**
  * Class representing Ignite client configuration.
  *
@@ -45,12 +45,12 @@ class IgniteClientConfiguration {
      * @throws {IgniteClientError} if error.
      */
     constructor(...endpoints) {
-        internal_1.ArgumentChecker.notEmpty(endpoints, 'endpoints');
-        this._endpoints = endpoints;
-        this._userName = null;
-        this._password = null;
-        this._useTLS = false;
-        this._options = null;
+        internal_1.ArgumentChecker.notEmpty(endpoints, 'endpoints')
+        this._endpoints = endpoints
+        this._userName = null
+        this._password = null
+        this._useTLS = false
+        this._options = null
     }
     /**
      * Sets username which will be used for authentication during the client's connection.
@@ -64,8 +64,8 @@ class IgniteClientConfiguration {
      * @throws {IgniteClientError} if error.
      */
     setUserName(userName) {
-        this._userName = userName;
-        return this;
+        this._userName = userName
+        return this
     }
     /**
      * Sets password which will be used for authentication during the client's connection.
@@ -80,8 +80,8 @@ class IgniteClientConfiguration {
      * @throws {IgniteClientError} if error.
      */
     setPassword(password) {
-        this._password = password;
-        return this;
+        this._password = password
+        return this
     }
     /**
      * Sets connection options.
@@ -97,10 +97,10 @@ class IgniteClientConfiguration {
      * @return {IgniteClientConfiguration} - the same instance of the IgniteClientConfiguration.
      */
     setConnectionOptions(useTLS, connectionOptions = null) {
-        this._useTLS = useTLS;
-        this._options = connectionOptions;
-        return this;
+        this._useTLS = useTLS
+        this._options = connectionOptions
+        return this
     }
 }
-exports.IgniteClientConfiguration = IgniteClientConfiguration;
-//# sourceMappingURL=IgniteClientConfiguration.js.map
+exports.IgniteClientConfiguration = IgniteClientConfiguration
+// # sourceMappingURL=IgniteClientConfiguration.js.map

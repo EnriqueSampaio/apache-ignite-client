@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-const IgniteClient = require('apache-ignite-client');
-const IgniteClientConfiguration = IgniteClient.IgniteClientConfiguration;
+const IgniteClient = require('apache-ignite-client')
+const IgniteClientConfiguration = IgniteClient.IgniteClientConfiguration
 
-const ENDPOINT1 = 'localhost:10800';
-const ENDPOINT2 = 'localhost:10801';
-const ENDPOINT3 = 'localhost:10802';
+const ENDPOINT1 = 'localhost:10800'
+const ENDPOINT2 = 'localhost:10801'
+const ENDPOINT3 = 'localhost:10802'
 
 // This example demonstrates failover behavior of the client
 // - configures the client to connect to a set of nodes
@@ -28,32 +28,29 @@ const ENDPOINT3 = 'localhost:10802';
 // - if connection is broken, the client automatically tries to reconnect to another node
 // - if no specified nodes are available, stops the client
 async function connectClient() {
-    const igniteClient = new IgniteClient(onStateChanged);
-    igniteClient.setDebug(true);
+    const igniteClient = new IgniteClient(onStateChanged)
+    igniteClient.setDebug(true)
     try {
         const igniteClientConfiguration = new IgniteClientConfiguration(
-            ENDPOINT1, ENDPOINT2, ENDPOINT3);
+            ENDPOINT1, ENDPOINT2, ENDPOINT3)
         // connect to Ignite a node
-        await igniteClient.connect(igniteClientConfiguration);
-    }
-    catch (err) {
-        console.log(err.message);
+        await igniteClient.connect(igniteClientConfiguration)
+    }    catch (err) {
+        console.log(err.message)
     }
 }
 
 function onStateChanged(state, reason) {
     if (state === IgniteClient.STATE.CONNECTED) {
-        console.log('Client is started');
-    }
-    else if (state === IgniteClient.STATE.CONNECTING) {
-        console.log('Client is connecting');
-    }
-    else if (state === IgniteClient.STATE.DISCONNECTED) {
-        console.log('Client is stopped');
+        console.log('Client is started')
+    }    else if (state === IgniteClient.STATE.CONNECTING) {
+        console.log('Client is connecting')
+    }    else if (state === IgniteClient.STATE.DISCONNECTED) {
+        console.log('Client is stopped')
         if (reason) {
-            console.log(reason);
+            console.log(reason)
         }
     }
 }
 
-connectClient();
+connectClient()

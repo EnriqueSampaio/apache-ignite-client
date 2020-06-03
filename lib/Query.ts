@@ -73,6 +73,10 @@ export class Query {
         this._local = false;
         this._pageSize = PAGE_SIZE_DEFAULT;
     }
+
+    get operation() {
+        return this._operation;
+    }
 }
 
 /**

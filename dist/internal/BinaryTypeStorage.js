@@ -14,98 +14,96 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BinaryTypeStorage = void 0;
-const Util = require("util");
-const internal_1 = require("../internal");
+'use strict'
+var __awaiter = (this && this.__awaiter) || function(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function(resolve) { resolve(value) }) }
+    return new (P || (P = Promise))(function(resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)) } catch (e) { reject(e) } }
+        function rejected(value) { try { step(generator['throw'](value)) } catch (e) { reject(e) } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected) }
+        step((generator = generator.apply(thisArg, _arguments || [])).next())
+    })
+}
+Object.defineProperty(exports, '__esModule', { value: true })
+exports.BinaryTypeStorage = void 0
+const Util = require('util')
+const internal_1 = require('../internal')
 class BinaryTypeStorage {
     constructor(communicator) {
-        this._communicator = communicator;
-        this._types = new Map();
+        this._communicator = communicator
+        this._types = new Map()
     }
     static getByComplexObjectType(complexObjectType) {
-        return BinaryTypeStorage.complexObjectTypes.get(complexObjectType);
+        return BinaryTypeStorage.complexObjectTypes.get(complexObjectType)
     }
     static setByComplexObjectType(complexObjectType, type, schema) {
         if (!BinaryTypeStorage.complexObjectTypes.has(complexObjectType)) {
-            BinaryTypeStorage.complexObjectTypes.set(complexObjectType, [type, schema]);
+            BinaryTypeStorage.complexObjectTypes.set(complexObjectType, [type, schema])
         }
     }
     static get complexObjectTypes() {
         if (!BinaryTypeStorage._complexObjectTypes) {
-            BinaryTypeStorage._complexObjectTypes = new Map();
+            BinaryTypeStorage._complexObjectTypes = new Map()
         }
-        return BinaryTypeStorage._complexObjectTypes;
+        return BinaryTypeStorage._complexObjectTypes
     }
     addType(binaryType, binarySchema) {
         return __awaiter(this, void 0, void 0, function* () {
-            const typeId = binaryType.id;
-            const schemaId = binarySchema.id;
-            let storageType = this._types.get(typeId);
+            const typeId = binaryType.id
+            const schemaId = binarySchema.id
+            let storageType = this._types.get(typeId)
             if (!storageType || !storageType.hasSchema(schemaId)) {
-                binaryType.addSchema(binarySchema);
+                binaryType.addSchema(binarySchema)
                 if (!storageType) {
-                    this._types.set(typeId, binaryType);
-                    storageType = binaryType;
+                    this._types.set(typeId, binaryType)
+                    storageType = binaryType
+                }                else {
+                    storageType.merge(binaryType, binarySchema)
                 }
-                else {
-                    storageType.merge(binaryType, binarySchema);
-                }
-                yield this._putBinaryType(binaryType);
+                yield this._putBinaryType(binaryType)
             }
-        });
+        })
     }
     getType(typeId, schemaId = null) {
         return __awaiter(this, void 0, void 0, function* () {
-            let storageType = this._types.get(typeId);
+            let storageType = this._types.get(typeId)
             if (!storageType || schemaId && !storageType.hasSchema(schemaId)) {
-                storageType = yield this._getBinaryType(typeId);
+                storageType = yield this._getBinaryType(typeId)
                 if (storageType) {
-                    this._types.set(storageType.id, storageType);
+                    this._types.set(storageType.id, storageType)
                 }
             }
-            return storageType;
-        });
+            return storageType
+        })
     }
     /** Private methods */
     _getBinaryType(typeId) {
         return __awaiter(this, void 0, void 0, function* () {
-            let binaryType = new internal_1.BinaryType(null);
-            binaryType._id = typeId;
+            let binaryType = new internal_1.BinaryType(null)
+            binaryType._id = typeId
             yield this._communicator.send(internal_1.BinaryUtils.OPERATION.GET_BINARY_TYPE, (payload) => __awaiter(this, void 0, void 0, function* () {
-                payload.writeInteger(typeId);
+                payload.writeInteger(typeId)
             }), (payload) => __awaiter(this, void 0, void 0, function* () {
-                const exist = payload.readBoolean();
+                const exist = payload.readBoolean()
                 if (exist) {
-                    yield binaryType._read(payload);
+                    yield binaryType._read(payload)
+                }                else {
+                    binaryType = null
                 }
-                else {
-                    binaryType = null;
-                }
-            }));
-            return binaryType;
-        });
+            }))
+            return binaryType
+        })
     }
     _putBinaryType(binaryType) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!binaryType.isValid()) {
-                throw internal_1.Errors.IgniteClientError.serializationError(true, Util.format('type "%d" can not be registered', binaryType.id));
+                throw internal_1.Errors.IgniteClientError.serializationError(true, Util.format('type "%d" can not be registered', binaryType.id))
             }
             yield this._communicator.send(internal_1.BinaryUtils.OPERATION.PUT_BINARY_TYPE, (payload) => __awaiter(this, void 0, void 0, function* () {
-                yield binaryType._write(payload);
-            }));
-        });
+                yield binaryType._write(payload)
+            }))
+        })
     }
 }
-exports.BinaryTypeStorage = BinaryTypeStorage;
-//# sourceMappingURL=BinaryTypeStorage.js.map
+exports.BinaryTypeStorage = BinaryTypeStorage
+// # sourceMappingURL=BinaryTypeStorage.js.map

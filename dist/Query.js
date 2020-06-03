@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ScanQuery = exports.SqlFieldsQuery = exports.SqlQuery = exports.Query = void 0;
-const internal_1 = require("./internal");
-const PAGE_SIZE_DEFAULT = 1024;
+'use strict'
+var __awaiter = (this && this.__awaiter) || function(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function(resolve) { resolve(value) }) }
+    return new (P || (P = Promise))(function(resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)) } catch (e) { reject(e) } }
+        function rejected(value) { try { step(generator['throw'](value)) } catch (e) { reject(e) } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected) }
+        step((generator = generator.apply(thisArg, _arguments || [])).next())
+    })
+}
+Object.defineProperty(exports, '__esModule', { value: true })
+exports.ScanQuery = exports.SqlFieldsQuery = exports.SqlQuery = exports.Query = void 0
+const internal_1 = require('./internal')
+const PAGE_SIZE_DEFAULT = 1024
 /**
  * Base class representing an Ignite SQL or Scan query.
  *
@@ -41,9 +41,9 @@ class Query {
      * @ignore
      */
     constructor(operation) {
-        this._operation = operation;
-        this._local = false;
-        this._pageSize = PAGE_SIZE_DEFAULT;
+        this._operation = operation
+        this._local = false
+        this._pageSize = PAGE_SIZE_DEFAULT
     }
     /**
      * Set local query flag.
@@ -53,8 +53,8 @@ class Query {
      * @return {Query} - the same instance of the Query.
      */
     setLocal(local) {
-        this._local = local;
-        return this;
+        this._local = local
+        return this
     }
     /**
      * Set {@link Cursor} page size.
@@ -64,11 +64,14 @@ class Query {
      * @return {Query} - the same instance of the Query.
      */
     setPageSize(pageSize) {
-        this._pageSize = pageSize;
-        return this;
+        this._pageSize = pageSize
+        return this
+    }
+    get operation() {
+        return this._operation
     }
 }
-exports.Query = Query;
+exports.Query = Query
 /**
  * Class representing an SQL query which returns the whole cache entries (key-value pairs).
  * @extends Query
@@ -96,14 +99,14 @@ class SqlQuery extends Query {
      * @return {SqlQuery} - new SqlQuery instance.
      */
     constructor(type, sql) {
-        super(internal_1.BinaryUtils.OPERATION.QUERY_SQL);
-        this.setType(type);
-        this.setSql(sql);
-        this._args = null;
-        this._argTypes = null;
-        this._distributedJoins = false;
-        this._replicatedOnly = false;
-        this._timeout = 0;
+        super(internal_1.BinaryUtils.OPERATION.QUERY_SQL)
+        this.setType(type)
+        this.setSql(sql)
+        this._args = null
+        this._argTypes = null
+        this._distributedJoins = false
+        this._replicatedOnly = false
+        this._timeout = 0
     }
     /**
      * Set name of a type or SQL table.
@@ -114,13 +117,12 @@ class SqlQuery extends Query {
      */
     setType(type) {
         if (this instanceof SqlFieldsQuery) {
-            internal_1.ArgumentChecker.invalidArgument(type, 'type', SqlFieldsQuery);
+            internal_1.ArgumentChecker.invalidArgument(type, 'type', SqlFieldsQuery)
+        }        else {
+            internal_1.ArgumentChecker.notNull(type, 'type')
         }
-        else {
-            internal_1.ArgumentChecker.notNull(type, 'type');
-        }
-        this._type = type;
-        return this;
+        this._type = type
+        return this
     }
     /**
      * Set SQL query string.
@@ -130,9 +132,9 @@ class SqlQuery extends Query {
      * @return {SqlQuery} - the same instance of the SqlQuery.
      */
     setSql(sql) {
-        internal_1.ArgumentChecker.notNull(sql, 'sql');
-        this._sql = sql;
-        return this;
+        internal_1.ArgumentChecker.notNull(sql, 'sql')
+        this._sql = sql
+        return this
     }
     /**
      * Set query arguments.
@@ -147,8 +149,8 @@ class SqlQuery extends Query {
      * @return {SqlQuery} - the same instance of the SqlQuery.
      */
     setArgs(...args) {
-        this._args = args;
-        return this;
+        this._args = args
+        return this
     }
     /**
      * Specifies types of query arguments.
@@ -168,8 +170,8 @@ class SqlQuery extends Query {
      * @return {SqlQuery} - the same instance of the SqlQuery.
      */
     setArgTypes(...argTypes) {
-        this._argTypes = argTypes;
-        return this;
+        this._argTypes = argTypes
+        return this
     }
     /**
      * Set distributed joins flag.
@@ -179,8 +181,8 @@ class SqlQuery extends Query {
      * @return {SqlQuery} - the same instance of the SqlQuery.
      */
     setDistributedJoins(distributedJoins) {
-        this._distributedJoins = distributedJoins;
-        return this;
+        this._distributedJoins = distributedJoins
+        return this
     }
     /**
      * Set replicated only flag.
@@ -190,8 +192,8 @@ class SqlQuery extends Query {
      * @return {SqlQuery} - the same instance of the SqlQuery.
      */
     setReplicatedOnly(replicatedOnly) {
-        this._replicatedOnly = replicatedOnly;
-        return this;
+        this._replicatedOnly = replicatedOnly
+        return this
     }
     /**
      * Set timeout.
@@ -202,8 +204,8 @@ class SqlQuery extends Query {
      * @return {SqlQuery} - the same instance of the SqlQuery.
      */
     setTimeout(timeout) {
-        this._timeout = timeout;
-        return this;
+        this._timeout = timeout
+        return this
     }
     /** Private methods */
     /**
@@ -211,44 +213,44 @@ class SqlQuery extends Query {
      */
     _write(communicator, buffer) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.BinaryCommunicator.writeString(buffer, this._type);
-            internal_1.BinaryCommunicator.writeString(buffer, this._sql);
-            yield this._writeArgs(communicator, buffer);
-            buffer.writeBoolean(this._distributedJoins);
-            buffer.writeBoolean(this._local);
-            buffer.writeBoolean(this._replicatedOnly);
-            buffer.writeInteger(this._pageSize);
-            buffer.writeLong(this._timeout);
-        });
+            internal_1.BinaryCommunicator.writeString(buffer, this._type)
+            internal_1.BinaryCommunicator.writeString(buffer, this._sql)
+            yield this._writeArgs(communicator, buffer)
+            buffer.writeBoolean(this._distributedJoins)
+            buffer.writeBoolean(this._local)
+            buffer.writeBoolean(this._replicatedOnly)
+            buffer.writeInteger(this._pageSize)
+            buffer.writeLong(this._timeout)
+        })
     }
     /**
      * @ignore
      */
     _writeArgs(communicator, buffer) {
         return __awaiter(this, void 0, void 0, function* () {
-            const argsLength = this._args ? this._args.length : 0;
-            buffer.writeInteger(argsLength);
+            const argsLength = this._args ? this._args.length : 0
+            buffer.writeInteger(argsLength)
             if (argsLength > 0) {
-                let argType;
+                let argType
                 for (let i = 0; i < argsLength; i++) {
-                    argType = this._argTypes && i < this._argTypes.length ? this._argTypes[i] : null;
-                    yield communicator.writeObject(buffer, this._args[i], argType);
+                    argType = this._argTypes && i < this._argTypes.length ? this._argTypes[i] : null
+                    yield communicator.writeObject(buffer, this._args[i], argType)
                 }
             }
-        });
+        })
     }
     /**
      * @ignore
      */
     _getCursor(communicator, payload, keyType = null, valueType = null) {
         return __awaiter(this, void 0, void 0, function* () {
-            const cursor = new internal_1.Cursor(communicator, internal_1.BinaryUtils.OPERATION.QUERY_SQL_CURSOR_GET_PAGE, payload, keyType, valueType);
-            cursor._readId(payload);
-            return cursor;
-        });
+            const cursor = new internal_1.Cursor(communicator, internal_1.BinaryUtils.OPERATION.QUERY_SQL_CURSOR_GET_PAGE, payload, keyType, valueType)
+            cursor._readId(payload)
+            return cursor
+        })
     }
 }
-exports.SqlQuery = SqlQuery;
+exports.SqlQuery = SqlQuery
 /**
  * Statement type of SQL Fields query.
  * @typedef SqlFieldsQuery.STATEMENT_TYPE
@@ -262,7 +264,7 @@ const STATEMENT_TYPE = Object.freeze({
     ANY: 0,
     SELECT: 1,
     UPDATE: 2
-});
+})
 /**
  * Class representing an SQL Fields query.
  * @extends SqlQuery
@@ -296,18 +298,18 @@ class SqlFieldsQuery extends SqlQuery {
      * @return {SqlFieldsQuery} - new SqlFieldsQuery instance.
      */
     constructor(sql) {
-        super(null, sql);
-        this._operation = internal_1.BinaryUtils.OPERATION.QUERY_SQL_FIELDS;
-        this._schema = null;
-        this._maxRows = -1;
-        this._statementType = SqlFieldsQuery.STATEMENT_TYPE.ANY;
-        this._enforceJoinOrder = false;
-        this._collocated = false;
-        this._lazy = false;
-        this._includeFieldNames = false;
+        super(null, sql)
+        this._operation = internal_1.BinaryUtils.OPERATION.QUERY_SQL_FIELDS
+        this._schema = null
+        this._maxRows = -1
+        this._statementType = SqlFieldsQuery.STATEMENT_TYPE.ANY
+        this._enforceJoinOrder = false
+        this._collocated = false
+        this._lazy = false
+        this._includeFieldNames = false
     }
     static get STATEMENT_TYPE() {
-        return STATEMENT_TYPE;
+        return STATEMENT_TYPE
     }
     /**
      * Set schema for the query.
@@ -317,8 +319,8 @@ class SqlFieldsQuery extends SqlQuery {
      * @return {SqlFieldsQuery} - the same instance of the SqlFieldsQuery.
      */
     setSchema(schema) {
-        this._schema = schema;
-        return this;
+        this._schema = schema
+        return this
     }
     /**
      * Set max rows.
@@ -328,8 +330,8 @@ class SqlFieldsQuery extends SqlQuery {
      * @return {SqlFieldsQuery} - the same instance of the SqlFieldsQuery.
      */
     setMaxRows(maxRows) {
-        this._maxRows = maxRows;
-        return this;
+        this._maxRows = maxRows
+        return this
     }
     /**
      * Set statement type.
@@ -339,8 +341,8 @@ class SqlFieldsQuery extends SqlQuery {
      * @return {SqlFieldsQuery} - the same instance of the SqlFieldsQuery.
      */
     setStatementType(type) {
-        this._statementType = type;
-        return this;
+        this._statementType = type
+        return this
     }
     /**
      * Set enforce join order flag.
@@ -350,8 +352,8 @@ class SqlFieldsQuery extends SqlQuery {
      * @return {SqlFieldsQuery} - the same instance of the SqlFieldsQuery.
      */
     setEnforceJoinOrder(enforceJoinOrder) {
-        this._enforceJoinOrder = enforceJoinOrder;
-        return this;
+        this._enforceJoinOrder = enforceJoinOrder
+        return this
     }
     /**
      * Set collocated flag.
@@ -361,8 +363,8 @@ class SqlFieldsQuery extends SqlQuery {
      * @return {SqlFieldsQuery} - the same instance of the SqlFieldsQuery.
      */
     setCollocated(collocated) {
-        this._collocated = collocated;
-        return this;
+        this._collocated = collocated
+        return this
     }
     /**
      * Set lazy query execution flag.
@@ -372,8 +374,8 @@ class SqlFieldsQuery extends SqlQuery {
      * @return {SqlFieldsQuery} - the same instance of the SqlFieldsQuery.
      */
     setLazy(lazy) {
-        this._lazy = lazy;
-        return this;
+        this._lazy = lazy
+        return this
     }
     /**
      * Set include field names flag.
@@ -383,8 +385,8 @@ class SqlFieldsQuery extends SqlQuery {
      * @return {SqlFieldsQuery} - the same instance of the SqlFieldsQuery.
      */
     setIncludeFieldNames(includeFieldNames) {
-        this._includeFieldNames = includeFieldNames;
-        return this;
+        this._includeFieldNames = includeFieldNames
+        return this
     }
     /** Private methods */
     /**
@@ -392,34 +394,34 @@ class SqlFieldsQuery extends SqlQuery {
      */
     _write(communicator, buffer) {
         return __awaiter(this, void 0, void 0, function* () {
-            internal_1.BinaryCommunicator.writeString(buffer, this._schema);
-            buffer.writeInteger(this._pageSize);
-            buffer.writeInteger(this._maxRows);
-            internal_1.BinaryCommunicator.writeString(buffer, this._sql);
-            yield this._writeArgs(communicator, buffer);
-            buffer.writeByte(this._statementType);
-            buffer.writeBoolean(this._distributedJoins);
-            buffer.writeBoolean(this._local);
-            buffer.writeBoolean(this._replicatedOnly);
-            buffer.writeBoolean(this._enforceJoinOrder);
-            buffer.writeBoolean(this._collocated);
-            buffer.writeBoolean(this._lazy);
-            buffer.writeLong(this._timeout);
-            buffer.writeBoolean(this._includeFieldNames);
-        });
+            internal_1.BinaryCommunicator.writeString(buffer, this._schema)
+            buffer.writeInteger(this._pageSize)
+            buffer.writeInteger(this._maxRows)
+            internal_1.BinaryCommunicator.writeString(buffer, this._sql)
+            yield this._writeArgs(communicator, buffer)
+            buffer.writeByte(this._statementType)
+            buffer.writeBoolean(this._distributedJoins)
+            buffer.writeBoolean(this._local)
+            buffer.writeBoolean(this._replicatedOnly)
+            buffer.writeBoolean(this._enforceJoinOrder)
+            buffer.writeBoolean(this._collocated)
+            buffer.writeBoolean(this._lazy)
+            buffer.writeLong(this._timeout)
+            buffer.writeBoolean(this._includeFieldNames)
+        })
     }
     /**
      * @ignore
      */
     _getCursor(communicator, payload, keyType = null, valueType = null) {
         return __awaiter(this, void 0, void 0, function* () {
-            const cursor = new internal_1.SqlFieldsCursor(communicator, payload);
-            yield cursor._readFieldNames(payload, this._includeFieldNames);
-            return cursor;
-        });
+            const cursor = new internal_1.SqlFieldsCursor(communicator, payload)
+            yield cursor._readFieldNames(payload, this._includeFieldNames)
+            return cursor
+        })
     }
 }
-exports.SqlFieldsQuery = SqlFieldsQuery;
+exports.SqlFieldsQuery = SqlFieldsQuery
 /**
  * Class representing a Scan query which returns the whole cache entries (key-value pairs).
  *
@@ -444,8 +446,8 @@ class ScanQuery extends Query {
      * @return {ScanQuery} - new ScanQuery instance.
      */
     constructor() {
-        super(internal_1.BinaryUtils.OPERATION.QUERY_SCAN);
-        this._partitionNumber = -1;
+        super(internal_1.BinaryUtils.OPERATION.QUERY_SCAN)
+        this._partitionNumber = -1
     }
     /**
      * Sets a partition number over which this query should iterate.
@@ -457,8 +459,8 @@ class ScanQuery extends Query {
      * @return {ScanQuery} - the same instance of the ScanQuery.
      */
     setPartitionNumber(partitionNumber) {
-        this._partitionNumber = partitionNumber;
-        return this;
+        this._partitionNumber = partitionNumber
+        return this
     }
     /** Private methods */
     /**
@@ -467,22 +469,22 @@ class ScanQuery extends Query {
     _write(communicator, buffer) {
         return __awaiter(this, void 0, void 0, function* () {
             // filter
-            yield communicator.writeObject(buffer, null);
-            buffer.writeInteger(this._pageSize);
-            buffer.writeInteger(this._partitionNumber);
-            buffer.writeBoolean(this._local);
-        });
+            yield communicator.writeObject(buffer, null)
+            buffer.writeInteger(this._pageSize)
+            buffer.writeInteger(this._partitionNumber)
+            buffer.writeBoolean(this._local)
+        })
     }
     /**
      * @ignore
      */
     _getCursor(communicator, payload, keyType = null, valueType = null) {
         return __awaiter(this, void 0, void 0, function* () {
-            const cursor = new internal_1.Cursor(communicator, internal_1.BinaryUtils.OPERATION.QUERY_SCAN_CURSOR_GET_PAGE, payload, keyType, valueType);
-            cursor._readId(payload);
-            return cursor;
-        });
+            const cursor = new internal_1.Cursor(communicator, internal_1.BinaryUtils.OPERATION.QUERY_SCAN_CURSOR_GET_PAGE, payload, keyType, valueType)
+            cursor._readId(payload)
+            return cursor
+        })
     }
 }
-exports.ScanQuery = ScanQuery;
-//# sourceMappingURL=Query.js.map
+exports.ScanQuery = ScanQuery
+// # sourceMappingURL=Query.js.map

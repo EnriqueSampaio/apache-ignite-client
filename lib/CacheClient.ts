@@ -20,8 +20,9 @@
 import {
     BinaryUtils,
     ArgumentChecker,
-    SqlQuery,
+    Query,
     SqlFieldsQuery,
+    SqlQuery,
     ScanQuery,
     BinaryCommunicator
 } from './internal';
@@ -539,13 +540,13 @@ export class CacheClient {
      *
      * @throws {IgniteClientError} if error.
      */
-    async query(query) {
+    async query(query: SqlQuery | SqlFieldsQuery | ScanQuery) {
         ArgumentChecker.notNull(query, 'query');
         ArgumentChecker.hasType(query, 'query', false, SqlQuery, SqlFieldsQuery, ScanQuery);
 
         let value = null;
         await this._communicator.send(
-            query._operation,
+            (query as Query).operation,
             async (payload) => {
                 this._writeCacheInfo(payload);
                 await query._write(this._communicator, payload);

@@ -15,36 +15,36 @@
  * limitations under the License.
  */
 
-const Util = require('util');
-const IgniteClient = require('apache-ignite-client');
-const ObjectType = IgniteClient.ObjectType;
-const ComplexObjectType = IgniteClient.ComplexObjectType;
-const IgniteClientConfiguration = IgniteClient.IgniteClientConfiguration;
-const CacheConfiguration = IgniteClient.CacheConfiguration;
-const QueryEntity = IgniteClient.QueryEntity;
-const QueryField = IgniteClient.QueryField;
-const SqlFieldsQuery = IgniteClient.SqlFieldsQuery;
-const SqlQuery = IgniteClient.SqlQuery;
+const Util = require('util')
+const IgniteClient = require('apache-ignite-client')
+const ObjectType = IgniteClient.ObjectType
+const ComplexObjectType = IgniteClient.ComplexObjectType
+const IgniteClientConfiguration = IgniteClient.IgniteClientConfiguration
+const CacheConfiguration = IgniteClient.CacheConfiguration
+const QueryEntity = IgniteClient.QueryEntity
+const QueryField = IgniteClient.QueryField
+const SqlFieldsQuery = IgniteClient.SqlFieldsQuery
+const SqlQuery = IgniteClient.SqlQuery
 
-const ENDPOINT = '127.0.0.1:10800';
+const ENDPOINT = '127.0.0.1:10800'
 
-const PERSON_CACHE_NAME = 'SqlQueryEntriesExample_person';
+const PERSON_CACHE_NAME = 'SqlQueryEntriesExample_person'
 
 class Person {
     constructor(firstName = null, lastName = null, salary = null) {
-        this.id = Person.generateId();
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.salary = salary;
+        this.id = Person.generateId()
+        this.firstName = firstName
+        this.lastName = lastName
+        this.salary = salary
     }
 
     static generateId() {
         if (!Person.id) {
-            Person.id = 0;
+            Person.id = 0
         }
-        const id = Person.id;
-        Person.id++;
-        return id;
+        const id = Person.id
+        Person.id++
+        return id
     }
 }
 
@@ -56,50 +56,48 @@ class Person {
 // - destroys the cache
 class SqlQueryEntriesExample {
     constructor() {
-        this._cache = null;
+        this._cache = null
     }
 
     async start() {
-        const igniteClient = new IgniteClient(this.onStateChanged.bind(this));
+        const igniteClient = new IgniteClient(this.onStateChanged.bind(this))
         try {
-            await igniteClient.connect(new IgniteClientConfiguration(ENDPOINT));
+            await igniteClient.connect(new IgniteClientConfiguration(ENDPOINT))
 
-            const cacheCfg = new CacheConfiguration().
-                setQueryEntities(
-                    new QueryEntity().
-                        setValueTypeName('Person').
-                        setFields([
+            const cacheCfg = new CacheConfiguration()
+                .setQueryEntities(
+                    new QueryEntity()
+                        .setValueTypeName('Person')
+                        .setFields([
                             new QueryField('id', 'java.lang.Integer'),
                             new QueryField('firstName', 'java.lang.String'),
                             new QueryField('lastName', 'java.lang.String'),
                             new QueryField('salary', 'java.lang.Double')
-                        ]));
-            this._cache = (await igniteClient.getOrCreateCache(PERSON_CACHE_NAME, cacheCfg)).
-                setKeyType(ObjectType.PRIMITIVE_TYPE.INTEGER).
-                setValueType(new ComplexObjectType(new Person()).
-                    setFieldType('id', ObjectType.PRIMITIVE_TYPE.INTEGER));
+                        ]))
+            this._cache = (await igniteClient.getOrCreateCache(PERSON_CACHE_NAME, cacheCfg))
+                .setKeyType(ObjectType.PRIMITIVE_TYPE.INTEGER)
+                .setValueType(new ComplexObjectType(new Person())
+                    .setFieldType('id', ObjectType.PRIMITIVE_TYPE.INTEGER))
 
-            await this.generateData();
+            await this.generateData()
 
             const sqlCursor = await this._cache.query(
-                new SqlQuery('Person', 'salary > ? and salary <= ?').
-                    setArgs(900, 1600));
+                new SqlQuery('Person', 'salary > ? and salary <= ?')
+                    .setArgs(900, 1600))
 
-            console.log('SqlQuery results (salary between 900 and 1600):');
-            let person;
+            console.log('SqlQuery results (salary between 900 and 1600):')
+            let person
             do {
-                person = (await sqlCursor.getValue()).getValue();
+                person = (await sqlCursor.getValue()).getValue()
                 console.log(Util.format('  name: %s %s, salary: %d',
-                    person.firstName, person.lastName, person.salary));
-            } while (sqlCursor.hasMore());
+                    person.firstName, person.lastName, person.salary))
+            } while (sqlCursor.hasMore())
 
-            await igniteClient.destroyCache(PERSON_CACHE_NAME);
-        }
-        catch (err) {
-            console.log('ERROR: ' + err.message);
-        }
-        finally {
-            igniteClient.disconnect();
+            await igniteClient.destroyCache(PERSON_CACHE_NAME)
+        }        catch (err) {
+            console.log('ERROR: ' + err.message)
+        }        finally {
+            igniteClient.disconnect()
         }
     }
 
@@ -109,28 +107,27 @@ class SqlQueryEntriesExample {
             ['Jane', 'Roe', 2000],
             ['Mary', 'Major', 1500],
             ['Richard', 'Miles', 800]
-        ];
+        ]
 
         for (let data of persons) {
-            let person = new Person(...data);
-            await this._cache.put(person.id, person);
+            let person = new Person(...data)
+            await this._cache.put(person.id, person)
         }
 
-        console.log('Data is generated');
+        console.log('Data is generated')
     }
 
     onStateChanged(state, reason) {
         if (state === IgniteClient.STATE.CONNECTED) {
-            console.log('Client is started');
-        }
-        else if (state === IgniteClient.STATE.DISCONNECTED) {
-            console.log('Client is stopped');
+            console.log('Client is started')
+        }        else if (state === IgniteClient.STATE.DISCONNECTED) {
+            console.log('Client is stopped')
             if (reason) {
-                console.log(reason);
+                console.log(reason)
             }
         }
     }
 }
 
-const sqlQueryEntriesExample = new SqlQueryEntriesExample();
-sqlQueryEntriesExample.start();
+const sqlQueryEntriesExample = new SqlQueryEntriesExample()
+sqlQueryEntriesExample.start()

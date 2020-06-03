@@ -15,29 +15,29 @@
  * limitations under the License.
  */
 
-'use strict';
+'use strict'
 
-module.exports = require('./lib/IgniteClient');
-module.exports.ObjectType = require('./lib/ObjectType').ObjectType;
-module.exports.MapObjectType = require('./lib/ObjectType').MapObjectType;
-module.exports.CollectionObjectType = require('./lib/ObjectType').CollectionObjectType;
-module.exports.ComplexObjectType = require('./lib/ObjectType').ComplexObjectType;
-module.exports.ObjectArrayType = require('./lib/ObjectType').ObjectArrayType;
-module.exports.BinaryObject = require('./lib/BinaryObject');
-module.exports.Timestamp = require('./lib/Timestamp');
-module.exports.EnumItem = require('./lib/EnumItem');
-module.exports.Decimal = require('decimal.js');
-module.exports.Errors = require('./lib/Errors');
-module.exports.IgniteClientConfiguration = require('./lib/IgniteClientConfiguration');
-module.exports.CacheClient = require('./lib/CacheClient');
-module.exports.CacheEntry = require('./lib/CacheClient').CacheEntry;
-module.exports.CacheConfiguration = require('./lib/CacheConfiguration');
-module.exports.QueryEntity = require('./lib/CacheConfiguration').QueryEntity;
-module.exports.QueryField = require('./lib/CacheConfiguration').QueryField;
-module.exports.QueryIndex = require('./lib/CacheConfiguration').QueryIndex;
-module.exports.CacheKeyConfiguration = require('./lib/CacheConfiguration').CacheKeyConfiguration;
-module.exports.SqlQuery = require('./lib/Query').SqlQuery;
-module.exports.SqlFieldsQuery = require('./lib/Query').SqlFieldsQuery;
-module.exports.ScanQuery = require('./lib/Query').ScanQuery;
-module.exports.Cursor = require('./lib/Cursor').Cursor;
-module.exports.SqlFieldsCursor = require('./lib/Cursor').SqlFieldsCursor;
+module.exports = require('./lib/IgniteClient')
+module.exports.ObjectType = require('./lib/ObjectType').ObjectType
+module.exports.MapObjectType = require('./lib/ObjectType').MapObjectType
+module.exports.CollectionObjectType = require('./lib/ObjectType').CollectionObjectType
+module.exports.ComplexObjectType = require('./lib/ObjectType').ComplexObjectType
+module.exports.ObjectArrayType = require('./lib/ObjectType').ObjectArrayType
+module.exports.BinaryObject = require('./lib/BinaryObject')
+module.exports.Timestamp = require('./lib/Timestamp')
+module.exports.EnumItem = require('./lib/EnumItem')
+module.exports.Decimal = require('decimal.js')
+module.exports.Errors = require('./lib/Errors')
+module.exports.IgniteClientConfiguration = require('./lib/IgniteClientConfiguration')
+module.exports.CacheClient = require('./lib/CacheClient')
+module.exports.CacheEntry = require('./lib/CacheClient').CacheEntry
+module.exports.CacheConfiguration = require('./lib/CacheConfiguration')
+module.exports.QueryEntity = require('./lib/CacheConfiguration').QueryEntity
+module.exports.QueryField = require('./lib/CacheConfiguration').QueryField
+module.exports.QueryIndex = require('./lib/CacheConfiguration').QueryIndex
+module.exports.CacheKeyConfiguration = require('./lib/CacheConfiguration').CacheKeyConfiguration
+module.exports.SqlQuery = require('./lib/Query').SqlQuery
+module.exports.SqlFieldsQuery = require('./lib/Query').SqlFieldsQuery
+module.exports.ScanQuery = require('./lib/Query').ScanQuery
+module.exports.Cursor = require('./lib/Cursor').Cursor
+module.exports.SqlFieldsCursor = require('./lib/Cursor').SqlFieldsCursor

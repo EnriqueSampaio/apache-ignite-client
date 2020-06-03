@@ -45,7 +45,7 @@ export class ArgumentChecker {
         }
         else {
             for (let type of types) {
-                if (arg instanceof type) {
+                if (arg instanceof type || arg.constructor.name === type.name) {
                     return;
                 }
             }

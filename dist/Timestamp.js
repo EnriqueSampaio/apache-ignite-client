@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Timestamp = void 0;
-const internal_1 = require("./internal");
+'use strict'
+Object.defineProperty(exports, '__esModule', { value: true })
+exports.Timestamp = void 0
+const internal_1 = require('./internal')
 /**
  * Class representing an Ignite timestamp type.
  *
@@ -41,8 +41,8 @@ class Timestamp extends Date {
      * @throws {IgniteClientError} if error.
      */
     constructor(time, nanos) {
-        super(time);
-        this.setNanos(nanos);
+        super(time)
+        this.setNanos(nanos)
     }
     /**
      * Returns the nanoseconds of the last millisecond from the timestamp.
@@ -50,7 +50,7 @@ class Timestamp extends Date {
      * @return {number} - nanoseconds of the last millisecond.
      */
     getNanos() {
-        return this._nanos;
+        return this._nanos
     }
     /**
      * Updates the nanoseconds of the last millisecond in the timestamp.
@@ -63,10 +63,10 @@ class Timestamp extends Date {
      * @throws {IgniteClientError} if error.
      */
     setNanos(nanos) {
-        internal_1.ArgumentChecker.isInteger(nanos, 'nanos');
-        this._nanos = nanos;
-        return this;
+        internal_1.ArgumentChecker.isInteger(nanos, 'nanos')
+        this._nanos = nanos
+        return this
     }
 }
-exports.Timestamp = Timestamp;
-//# sourceMappingURL=Timestamp.js.map
+exports.Timestamp = Timestamp
+// # sourceMappingURL=Timestamp.js.map

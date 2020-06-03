@@ -15,31 +15,31 @@
  * limitations under the License.
  */
 
-'use strict';
+'use strict'
 
-const TestingHelper = require('../TestingHelper');
+const TestingHelper = require('../TestingHelper')
 
 describe('execute examples >', () => {
     beforeAll((done) => {
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = TestingHelper.TIMEOUT;
-        done();
-    });
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = TestingHelper.TIMEOUT
+        done()
+    })
 
     it('CachePutGetExample', (done) => {
-        TestingHelper.executeExample('examples/CachePutGetExample.js').
-            then(done).
-            catch(error => done.fail(error));
-    });
+        TestingHelper.executeExample('examples/CachePutGetExample.js')
+            .then(done)
+            .catch(error => done.fail(error))
+    })
 
     it('SqlExample', (done) => {
-        TestingHelper.executeExample('examples/SqlExample.js').
-            then(done).
-            catch(error => done.fail(error));
-    });
+        TestingHelper.executeExample('examples/SqlExample.js')
+            .then(done)
+            .catch(error => done.fail(error))
+    })
 
     it('SqlQueryEntriesExample', (done) => {
-        TestingHelper.executeExample('examples/SqlQueryEntriesExample.js').
-            then(done).
-            catch(error => done.fail(error));
-    });
-});
+        TestingHelper.executeExample('examples/SqlQueryEntriesExample.js')
+            .then(done)
+            .catch(error => done.fail(error))
+    })
+})

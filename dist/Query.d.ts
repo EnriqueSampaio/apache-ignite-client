@@ -31,6 +31,7 @@ export declare class Query {
      * @ignore
      */
     constructor(operation: any);
+    get operation(): any;
 }
 /**
  * Class representing an SQL query which returns the whole cache entries (key-value pairs).

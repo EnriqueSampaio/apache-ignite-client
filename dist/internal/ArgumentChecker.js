@@ -14,63 +14,61 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ArgumentChecker = void 0;
-const Util = require("util");
-const Errors = require("../internal");
+'use strict'
+Object.defineProperty(exports, '__esModule', { value: true })
+exports.ArgumentChecker = void 0
+const Util = require('util')
+const Errors = require('../internal')
 /** Helper class for the library methods arguments check. */
 class ArgumentChecker {
     static notEmpty(arg, argName) {
         if (!arg || arg instanceof Array && arg.length === 0) {
-            throw Errors.IgniteClientError.illegalArgumentError(Util.format('"%s" argument should not be empty', argName));
+            throw Errors.IgniteClientError.illegalArgumentError(Util.format('"%s" argument should not be empty', argName))
         }
     }
     static notNull(arg, argName) {
         if (arg === null || arg === undefined) {
-            throw Errors.IgniteClientError.illegalArgumentError(Util.format('"%s" argument should not be null', argName));
+            throw Errors.IgniteClientError.illegalArgumentError(Util.format('"%s" argument should not be null', argName))
         }
     }
     static hasType(arg, argName, isArray, ...types) {
         if (arg === null) {
-            return;
+            return
         }
         if (isArray && arg instanceof Array) {
             for (let a of arg) {
-                ArgumentChecker.hasType(a, argName, false, ...types);
+                ArgumentChecker.hasType(a, argName, false, ...types)
             }
-        }
-        else {
+        }        else {
             for (let type of types) {
-                if (arg instanceof type) {
-                    return;
+                if (arg instanceof type || arg.constructor.name === type.name) {
+                    return
                 }
             }
-            throw Errors.IgniteClientError.illegalArgumentError(Util.format('"%s" argument has incorrect type', argName));
+            throw Errors.IgniteClientError.illegalArgumentError(Util.format('"%s" argument has incorrect type', argName))
         }
     }
     static hasValueFrom(arg, argName, isArray, values) {
         if (isArray && arg instanceof Array) {
             for (let a of arg) {
-                ArgumentChecker.hasValueFrom(a, argName, false, values);
+                ArgumentChecker.hasValueFrom(a, argName, false, values)
             }
-        }
-        else {
+        }        else {
             if (!Object.values(values).includes(arg)) {
-                throw Errors.IgniteClientError.illegalArgumentError(Util.format('"%s" argument has incorrect value', argName));
+                throw Errors.IgniteClientError.illegalArgumentError(Util.format('"%s" argument has incorrect value', argName))
             }
         }
     }
     static isInteger(arg, argName) {
         if (arg === null || arg === undefined || !Number.isInteger(arg)) {
-            throw Errors.IgniteClientError.illegalArgumentError(Util.format('"%s" argument should be integer', argName));
+            throw Errors.IgniteClientError.illegalArgumentError(Util.format('"%s" argument should be integer', argName))
         }
     }
     static invalidArgument(arg, argName, type) {
         if (arg !== null && arg !== undefined) {
-            throw Errors.IgniteClientError.illegalArgumentError(Util.format('"%s" argument is invalid for %s', argName, type.constructor.name));
+            throw Errors.IgniteClientError.illegalArgumentError(Util.format('"%s" argument is invalid for %s', argName, type.constructor.name))
         }
     }
 }
-exports.ArgumentChecker = ArgumentChecker;
-//# sourceMappingURL=ArgumentChecker.js.map
+exports.ArgumentChecker = ArgumentChecker
+// # sourceMappingURL=ArgumentChecker.js.map

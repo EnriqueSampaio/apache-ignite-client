@@ -15,19 +15,19 @@
  * limitations under the License.
  */
 
-'use strict';
+'use strict'
 
-const TestingHelper = require('../TestingHelper');
+const TestingHelper = require('../TestingHelper')
 
 describe('execute auth example >', () => {
     beforeAll((done) => {
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = TestingHelper.TIMEOUT;
-        done();
-    });
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = TestingHelper.TIMEOUT
+        done()
+    })
 
     it('AuthTlsExample', (done) => {
-        TestingHelper.executeExample('examples/AuthTlsExample.js').
-            then(done).
-            catch(error => done.fail(error));
-    });
-});
+        TestingHelper.executeExample('examples/AuthTlsExample.js')
+            .then(done)
+            .catch(error => done.fail(error))
+    })
+})

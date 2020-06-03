@@ -1,3 +1,4 @@
+import { SqlFieldsQuery, SqlQuery, ScanQuery } from './internal';
 /**
  * Class representing and providing access to Ignite cache.
  *
@@ -352,7 +353,7 @@ export declare class CacheClient {
      *
      * @throws {IgniteClientError} if error.
      */
-    query(query: any): Promise<any>;
+    query(query: SqlQuery | SqlFieldsQuery | ScanQuery): Promise<any>;
     /** Private methods */
     /**
      * @ignore
